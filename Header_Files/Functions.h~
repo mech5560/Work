@@ -1,0 +1,215 @@
+/*  Last Modified Time-stamp: <2014-04-24 16:46:03 mike_georgiou> */ 
+
+
+
+#include "Struct.h"
+#ifndef Functions
+#define Functions
+
+/* Allocating Functions*/
+void  Allocator(Ar *Arr, int ldz, int ldy, int ldx,
+	       int lz, int rz, int ly, int ry, int lx, int rx);
+
+void DeAllocator( Ar *Arr, int ldz, int ldy, int ldx,
+		  int lz, int rz, int ly, int ry, int lx, int rx);
+
+void Density_Calculator(double ***Rho, double ***T, int ldz, int ldy, int ldx);
+
+
+/* Boundary Condition Functions*/
+void BC(Ar *Arr, int ldz, int ldy, int ldx, 
+	int lz, int rz, 
+	int ly, int ry, 
+	int lx, int rx,
+	int index);
+
+void BC_Predictor(Ar *Arr, int ldz, int ldy, int ldx, 
+		  int lz, int rz, 
+		  int ly, int ry, 
+		  int lx, int rx,
+		  int index);
+
+void BC_Corrector(Ar *Arr, int ldz, int ldy, int ldx, 
+		  int lz, int rz, 
+		  int ly, int ry, 
+		  int lx, int rx,
+		  int index);
+
+
+
+
+void BC_Single(double ***Matrix, int ldz, int ldy, int ldx,
+	       int lz, int rz, int ly, int ry, int lx, int rx, int index,
+	       double BC_Top, double BC_Bottom, double ***Delta_Y);
+
+
+
+void BC_Flux(double ***Flux_Z, double ***Flux_Y,double ***Flux_X,
+	     double ***Speed_Z, double ***Speed_Y,double ***Speed_X,
+	     int ldz, int ldy, int ldx,
+	     int lz, int rz, 
+	     int ly, int ry,
+	     int lx, int rx);
+
+
+/* Energy Equation Functions */
+void Energy_Equation(double ***Temp_Star, double ***Temp_N,double ***Rho_N,
+										 double ***Speed_Z, double ***Speed_Y, double ***Speed_X,
+										 double ***Points_Y, double dz, double dx,
+										 int ldz, int ldy,  int ldx);
+
+
+
+void Temperature_Update_Corrector(double ***Temperature_New, double ***Temperature_Old, 
+				  double ***Temperature, double ***Rho_N,
+				  double ***Speed_Z, double ***Speed_Y, double ***Speed_X,
+				  double ***Points_Y, double dz, double dx,
+				  int ldz, int ldy,  int ldx);
+
+
+
+
+
+void Cubic_Mesh( double ***points_y,
+			int ldz, int ldy, int ldx, 
+			int zl, int zr, int yl, int yr, int xl, int xr);
+
+
+
+
+void Initial_Zero( double ***Speed_X, int ldz, int ldy, int ldx,
+		   int lz, int rz, int ly, int ry, int lx, int rx);
+ 
+void Initial_One( double ***Speed_X, int ldz, int ldy, int ldx,
+		  int lz, int rz, int ly, int ry, int lx, int rx);
+
+void Initial_Cos( double ***Speed_X, int ldz, int ldy, int ldx, 
+									int lz, int rz, int ly, int ry, int lx, int rx);
+
+void Print_3D(double ***A, int ldz, int ldy, int ldx,
+	      int zl,int  zr,
+	      int yl, int yr, 
+	      int xl, int xr);
+
+void Print_3D_Single(double *A, int ldz, int ldy, int ldx, int time_index, char *mike);
+
+void Print_3D_File(double ***A, int ldz, int ldy, int ldx, int time_index, char*);
+
+void Print_3D_Plane(double ***A, int ldz, int ldy, int ldx,
+		    int zl,int  zr,
+		    int yl, int yr, 
+		    int xl, int xr);
+
+void Print_3D_Binary(double ***A, int ldz, int ldy, int ldx, int time_index, char *mike);
+
+
+
+void Velocity_Residual_X( double ***Residual_X, double ***Speed_Z, double ***Speed_Y,
+			  double ***Speed_X,double ***Points_Y,   double ***Flux_Z,
+			  double ***Flux_Y, double ***Flux_X, double ***Temperature,
+			  double dz, double dx, int ldz, int ldy, int ldx);
+
+
+void Intermediate_Velocity_X(double ***Speed_Int_X,  double ***Residual_X,
+			     double ***Residual_X_Old, 
+			     double ***Speed_Z, double ***Speed_Y, double ***Speed_X,
+			     double ***Flux_Z, double ***Flux_Y, double ***Flux_X,
+			     double ***Points_Y,double ***Rho_New, double ***Rho, double ***, 
+			     double dz, double dx,int ldz, int ldy, int ldx);
+
+
+void Intermediate_Velocity_Y(double ***Speed_Int_Y,  double ***Residual_Y,
+			     double ***Residual_Y_Old, double ***Speed_Z, double ***Speed_Y, 
+			     double ***Speed_X,double ***Flux_Z, double ***Flux_Y,
+			     double ***Flux_X, double ***Points_Y,double ***Rho_New, double ***Rho, 
+			     double ***, double dz, double dx,int ldz, int ldy, int ldx);
+
+
+void Velocity_Residual_Y( double ***Residual_X, double ***Speed_Z, double ***Speed_Y,
+			  double ***Speed_X,double ***Points_Y,   double ***Flux_Z,
+			  double ***Flux_Y, double ***Flux_X,double ***,
+			  double dz, double dx, int ldz, int ldy, int ldx);
+
+
+
+void Intermediate_Velocity_Z(double ***Speed_Int_Z,  double ***Residual_z,
+			     double ***Residual_Z_Old, double ***Speed_Z, double ***Speed_Y, 
+			     double ***Speed_X,double ***Flux_Z, double ***Flux_Y,
+			     double ***Flux_X, double ***Points_Y,double ***Rho_New, double ***Rho,
+			     double ***, double dz, double dx,int ldz, int ldy, int ldx);
+
+
+void Velocity_Residual_Z( double ***Residual_Z, double ***Speed_Z, double ***Speed_Y,
+			  double ***Speed_X,double ***Points_Y,   double ***Flux_Z,
+			  double ***Flux_Y, double ***Flux_X, double ***,
+			  double dz, double dx, int ldz, int ldy, int ldx);
+
+
+
+
+
+
+/* Poisson Solver*/
+void BCSG(double *sL, int *ijL, double *X, double *D, double *Pre,  
+	  double error, int L, int N, int& flag);
+
+void BCSG_Printing(double *sL, int *ijL, double *X, double *D, double *Pre,  
+									 double error, int L, int N, int& flag);
+
+
+void Vector_Constructor(double *s_A, double *Precond_A, int *ij_A,
+                        double Coefficients_Z[4], double Coefficients_X[4], double ***Points_Y,
+                        int ldz, int ldy, int ldx, int Nze);
+
+
+void RHS_Poisson( double *RHS, double ***Speed_Int_X,
+                  double ***Speed_Int_Y, double ***Speed_Int_Z,
+                  double ***Rho_Star, double ***Rho_N, double ***Rho_Nm1, double ***Points_Y,
+                  double dz, double dx,int ldz, int ldy, int ldx);
+
+void RHS_Poisson_Old( double *RHS, double ***Speed_Int_X,
+		      double ***Speed_Int_Y, double ***Speed_Int_Z,
+		      double ***Rho_Star, double ***Rho_N, double ***Rho_Nm1, double ***Points_Y,
+		      double dz, double dx,int ldz, int ldy, int ldx);
+
+
+
+/* Velocity Update*/
+
+void Velocity_Update_X(double ***Speed_New_X, double ***Speed_Int_X, 
+		       double ***Rho_New, double ***Pressure_New,
+		       double dx,int ldz, int ldy, int ldx);
+
+void Velocity_Update_Y(double ***Speed_New_Y, double ***Speed_Int_Y, 
+		       double ***Rho_New, double ***Pressure_New,
+		       double *** Points_Y,int ldz, int ldy, int ldx);
+
+void Velocity_Update_Z(double ***Speed_New_Z, double ***Speed_Int_Z, 
+		       double ***Rho_New, double ***Pressure_New,
+		       double dz,int ldz, int ldy, int ldx);
+
+
+
+
+/* Flux Evaluation */
+
+void Flux_Evaluation_Z(double ***Flux_New_Z, double ***Speed_Int_Z, 
+		       double ***Rho_New, double ***Pressure_New,
+		       double dx,int ldz, int ldy, int ldx);
+
+void Flux_Evaluation_X(double ***Flux_New_X, double ***Speed_Int_X, 
+		       double ***Rho_New, double ***Pressure_New,
+		       double dx,int ldz, int ldy, int ldx);
+
+void Flux_Evaluation_Y(double ***Flux_New_Y, double ***Speed_Int_Y, 
+		       double ***Rho_New, double ***Pressure_New,
+		       double ***Points_Y,int ldz, int ldy, int ldx);
+
+
+
+
+
+
+
+
+#endif

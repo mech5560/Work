@@ -1,0 +1,43 @@
+/*  Last Modified Time-stamp: <2014-04-18 09:05:45 mike_georgiou> */ 
+//d Program that the problems constant's will be defined 
+/* const identifier must be placed in order for the variables to be read only once */
+
+
+// General contants
+
+#ifndef Constants
+#define Constants
+const  double dt = 0.05;
+
+
+
+// Non-Dimensional Numbers and quatities of my problem
+const double Reynolds = 500.;
+const double Press_Grad = 12./Reynolds;
+const double Prandtl  = 3.5;
+const double Richardson  = 0.002;
+#endif
+
+
+
+
+
+#ifndef Boundary_Conditions
+#define Boundary_Conditions
+
+const double Temp_Top = 1.;
+const double Temp_Bottom = 1.;
+
+const double Temp_Grad_Top = 0.;
+const double Temp_Grad_Bottom = 0.;
+
+const double Rho_Top = 1.;
+const double Rho_Bottom = 1.;
+
+const double Rho_Grad_Top = 0.;
+const double Rho_Grad_Bottom = 0.;
+
+const double Press_Grad_Top = 0.;
+const double Press_Grad_Bottom = 0.;
+
+#endif

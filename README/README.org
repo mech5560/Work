@@ -1,0 +1,18 @@
+*** Objectives for this code [1/2]
+- [X] Modify the code in order to interpolate in the non-uniform direction[1/2]
+	- [X] Flux Evaluation functions 
+	- [-] Residuals
+		- [ ] Residual_X
+
+
+- [-] Use, only where it is possible the newly written functions. I will not
+  change the structure of the code though[0/0]
+	- [X] Flux Evaluation functions 
+	- [X] Residuals
+		- [X] Residual_X
+		- [X] Residual_Y
+		- [X] Residual_Z
+	- [X] Energy Equation
+	  - [X] Predictor
+    - [X] Corrector
+	- [-] Velocity Update

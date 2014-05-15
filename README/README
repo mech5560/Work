@@ -1,0 +1,24 @@
+Last Modified: <2014-04-28 16:46:48 mike_georgiou> 
+
+
+		 /// Code Information ///
+This code uses the new versions of my functions where they are  split
+into smaller functions and  header files are used.
+
+
+		 /// Compilation Information ///
+It develops the velocity profile for a constant pressure gradient but it does
+not work with the O2 optimization flag. It works with O1 and all the O2 flags
+though. 
+
+
+
+				/// Result Information /// 
+This code is able to develop a parabolic velocity profile for constant pressure
+gradient flow.
+
+
+				 /// Objectives ///
+
+I wonna check if this code is capable of adjusting the non-uniform grid while
+maintaining the parabolic profile

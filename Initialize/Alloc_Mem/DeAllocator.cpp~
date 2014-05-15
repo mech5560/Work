@@ -1,0 +1,68 @@
+/*  Last Modified Time-stamp: <2014-03-24 17:32:02 mike_georgiou> */ 
+/*******************************************
+ *   Author: Michail Georgiou 
+ * DeAllocator.cpp -- Deallocationg the memory
+ *
+ * Written on Tuesday, 18 March 2014.
+   ********************************************/
+   
+  #include "./../../Header_Files/Matrix_Alloc_New.h" 
+  #include "./../../Header_Files/Matrix_Alloc.h" 
+  #include "./../../Header_Files/Macros.h" 
+  #include"./../../Header_Files/Struct.h"
+
+   
+   
+   void DeAllocator( Ar *Arr, int ldz, int ldy, int ldx,
+		      int lz, int rz, int ly, int ry, int lx, int rx)
+ {
+
+
+  Free_Matrix_New(Arr->Delta_Y, lz,ly,lx);
+
+
+  Free_Matrix_New(Arr->Speed_X, lz,ly,lx);
+  Free_Matrix_New(Arr->Speed_Y, lz,ly,lx);
+  Free_Matrix_New(Arr->Speed_Z, lz,ly,lx);
+
+  Free_Matrix_New(Arr->Speed_New_X,lz,ly,lx);
+  Free_Matrix_New(Arr->Speed_New_Y,lz,ly,lx);
+  Free_Matrix_New(Arr->Speed_New_Z,lz,ly,lx);
+
+  Free_Matrix_New(Arr->Speed_Int_X, 0,0,lx);
+  Free_Matrix_New(Arr->Speed_Int_Y, 0,ly,0);
+  Free_Matrix_New(Arr->Speed_Int_Z, lz,0,0);
+
+
+  Free_Matrix_New(Arr->Temperature,lz,ly,lx);
+  Free_Matrix_New(Arr->Temperature_New, lz,ly,lx);
+  Free_Matrix_New(Arr->Temperature_Av,lz,ly,lx);
+
+
+  Free_Matrix_New(Arr->Rho, lz, ly, lx);
+  Free_Matrix_New(Arr->Rho_New, lz, ly, lx);
+  Free_Matrix_New(Arr->Rho_Nm1, lz, ly, lx);
+
+  Free_Matrix_New(Arr->Pressure,lz,ly,lx);
+  Free_Matrix_New(Arr->Pressure_New,lz,ly,lx);
+
+
+  Free_Matrix_New(Arr->Flux_X, 0,0,1);
+  Free_Matrix_New(Arr->Flux_Y, 0,1,0);
+  Free_Matrix_New(Arr->Flux_Z, 1,0,0);
+
+  // Free_Matrix(Arr->Flux_New_X, ldz+3, ldy+3, ldx+3);
+  // Free_Matrix(Arr->Flux_New_Y, ldz+3, ldy+3, ldx+3);
+  // Free_Matrix(Arr->Flux_New_Z, ldz+3, ldy+3, ldx+3);
+
+
+
+  Free_Matrix(Arr->Residual_X, ldx, ldy, ldz);
+  Free_Matrix(Arr->Residual_Y, ldx, ldy, ldz);
+  Free_Matrix(Arr->Residual_Z, ldx, ldy, ldz);
+
+  Free_Matrix(Arr->Residual_Old_X, ldx, ldy, ldz);
+  Free_Matrix(Arr->Residual_Old_Y, ldx, ldy, ldz);
+  Free_Matrix(Arr->Residual_Old_Z, ldx, ldy, ldz);
+
+ }

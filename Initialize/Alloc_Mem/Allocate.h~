@@ -1,0 +1,18 @@
+#ifndef INITIALIZE_ALLOCATE_H
+#define INITIALIZE_ALLOCATE_H
+#include <iostream>
+using namespace std;
+
+
+
+double *** Matrix_Alloc_New(int ldz, int ldy, int ldx,
+                            int z_left,int z_right,
+                            int y_left,int y_right,
+                            int x_left,int x_right);
+
+void Free_Matrix_New(double ***pA,
+										 int z_left, int y_left, int x_left);
+
+
+#endif
+

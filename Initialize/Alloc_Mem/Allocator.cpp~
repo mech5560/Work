@@ -1,0 +1,115 @@
+/*  Last Modified Time-stamp: <2014-04-14 15:21:09 mike_georgiou> */ 
+/*******************************************
+ *   Author: Michail Georgiou 
+ * Allocator->cpp --  In this program I will put all the arrays that i have to
+ * allocate memory in my code
+ * inside a structure. This will be done in order to make my code more flexible
+ *
+ * Written on Monday, 17 March 2014
+ ********************************************/
+   
+
+  #include "./../../Header_Files/Matrix_Alloc_New.h" 
+  #include "./../../Header_Files/Matrix_Alloc.h" 
+  #include "./../../Header_Files/Macros.h" 
+  #include "./../../Header_Files/Struct.h"
+
+   void Allocator(  Ar *Arr, int ldz, int ldy, int ldx,
+		    int lz, int rz, int ly, int ry, int lx, int rx) 
+   {
+   
+   Arr->Delta_Y =Matrix_Alloc_New(ldz, ldy, ldx,lz,rz,ly,ry,lx,rx);
+   Alloc_Check( Arr->Delta_Y);
+
+
+  /* Velocity Arrays - Expanded in all directions because of the Calculation of the Convective Fluxes*/
+
+   Arr->Speed_X = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+   Alloc_Check( Arr->Speed_X);
+
+   Arr->Speed_Y = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+   Alloc_Check( Arr->Speed_Y);
+
+   Arr->Speed_Z = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+   Alloc_Check( Arr->Speed_Z);
+   
+   Arr->Speed_New_X = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+   Alloc_Check( Arr->Speed_X);
+
+   Arr->Speed_New_Y = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Speed_Y);
+
+   Arr->Speed_New_Z = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Speed_Z);
+
+
+  /*The expansion in these matrices is arbitrary and has nothing to do with the BC i am using*/
+  Arr->Speed_Int_X = Matrix_Alloc_New(ldz,ldy,ldx,0,0,0,0,lx,rx);
+  Alloc_Check( Arr->Speed_Int_X);
+
+  Arr->Speed_Int_Y = Matrix_Alloc_New(ldz,ldy,ldx,0,0,ly,ry,0,0);
+  Alloc_Check( Arr->Speed_Int_Y);
+
+  Arr->Speed_Int_Z = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,0,0,0,0);
+  Alloc_Check( Arr->Speed_Int_Z);
+
+
+  /* Temperature - Density - Pressure  Arrays*/
+  Arr->Temperature = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Temperature);
+
+  Arr->Temperature_New = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Temperature_New);
+
+  Arr->Temperature_Av = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Temperature_Av);
+
+
+  Arr->Rho = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Rho);
+
+  Arr->Rho_Nm1 = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Rho_Nm1);
+
+  Arr->Rho_New = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Rho_New);
+
+
+  Arr->Pressure = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Pressure);
+
+  Arr->Pressure_New = Matrix_Alloc_New(ldz,ldy,ldx,lz,rz,ly,ry,lx,rx);
+  Alloc_Check( Arr->Pressure_New);
+
+
+  /* Residuals */
+  Arr->Residual_X = Matrix_Alloc(ldz, ldy, ldx);
+  Alloc_Check( Arr->Residual_X);
+
+  Arr->Residual_Y = Matrix_Alloc(ldz, ldy, ldx);
+  Alloc_Check( Arr->Residual_Y);
+
+  Arr->Residual_Z = Matrix_Alloc(ldz, ldy, ldx);
+  Alloc_Check( Arr->Residual_Z);
+
+  Arr->Residual_Old_X = Matrix_Alloc(ldz, ldy, ldx);
+  Alloc_Check( Arr->Residual_Old_X);
+
+  Arr->Residual_Old_Y = Matrix_Alloc(ldz, ldy, ldx);
+  Alloc_Check( Arr->Residual_Old_Y);
+
+  Arr->Residual_Old_Z = Matrix_Alloc(ldz, ldy, ldx);
+  Alloc_Check( Arr->Residual_Old_Z);
+
+
+  /*Fluxes*/
+  Arr->Flux_X = Matrix_Alloc_New(ldz, ldy, ldx+1,0,0,0,0,1,1);
+  Alloc_Check( Arr->Flux_X);
+
+  Arr->Flux_Y = Matrix_Alloc_New(ldz, ldy+1, ldx,0,0,0,0,0,0);
+  Alloc_Check( Arr->Flux_Y);
+
+  Arr->Flux_Z = Matrix_Alloc_New(ldz+1, ldy, ldx,1,1,0,0,0,0);
+  Alloc_Check( Arr->Flux_Z);
+
+ }

@@ -1,0 +1,98 @@
+/*******************************************
+ * Author: Michail Georgiou
+ * Last Modified: Time-stamp: <2014-04-14 15:36:17 mike_georgiou>
+ *
+ * BC_Flux.cpp -- In this program I will define  the boundary
+ * conditions for my problem.
+ * Firstly, I ll start with the easy ones (Periodic) and then I ll define the
+ * BC.
+ * at the wall
+ *
+ * The velocity BC at the wall is defined by the non-slip condition.
+ * For the density I can define either Dirichlet=0 or obtain the Rho_{wall-1} by
+ * the constitutive equatiion.
+ * As for the intermediate velocities i ll follow christos suggestions
+ *
+ * Written on Thursday, 20 March 2014.
+ ********************************************/
+
+
+#include "Struct.h"
+#include "./../../Header_Files/Data.h"
+
+void BC_Flux(double ***Flux_Z, double ***Flux_Y,double ***Flux_X,
+             double ***Speed_Int_Z, double ***Speed_Int_Y,double ***Speed_Int_X,
+             int ldz, int ldy, int ldx,
+             int lz, int rz,
+             int ly, int ry,
+             int lx, int rx)
+{
+
+
+
+  /* X- Direction BC */
+  for (int k = 0; k < ldz; k++){
+    for (int j = 0; j < ldy; j++) {
+
+
+      /*******Left-Periodic-BC************/
+      /*Flux_X Array*/
+
+      Flux_X[k][j][-1] =  Flux_X[k][j][ldx];
+
+      /*******Right-Periodic-BC***********/
+      /*Flux_X Array   */
+
+      Flux_X[k][j][ldx+1] =  Flux_X[k][j][0];
+
+      for (int i=1; i<=lx; i++)
+        { Speed_Int_X[k][j][-i] =  Speed_Int_X[k][j][ldx-i];}
+
+      for (int i=0; i<rx; i++)
+        {
+          Speed_Int_X[k][j][ldx+i] =  Speed_Int_X[k][j][i];
+        }
+    }
+  }
+
+
+  /* Z-Direction BC*/
+  for (int j = 0; j < ldy; j++){
+    for (int i = 0; i< ldx; i++){
+      /******* "Back"-Periodic-BC************/
+      /*Flux_Z Array*/
+      Flux_Z[-1][j][i] =  Flux_Z[ldz][j][i];
+
+      /*******"Front"-Periodic-BC***********/
+      /*Flux_Z Array*/
+      Flux_Z[ldz+1][j][i] =  Flux_Z[0][j][i];
+
+      for (int k=1; k<=lz; k++)
+        {
+          Speed_Int_Z[-k][j][i] =  Speed_Int_Z[ldz-k][j][i];
+        }
+
+      for (int k=0; k<rz; k++)
+        {
+          Speed_Int_Z[ldz+k][j][i] =  Speed_Int_Z[k][j][i];
+        }
+
+    }
+  }
+
+  /* Wall BC for all the quantities */
+  for (int k = 0; k < ldz; k++){
+    for (int i = 0; i< ldx; i++){
+
+      // /* Velocities - No slip Condition */
+      // /*Bottom Wall*/
+      // Flux_Y[k][-1][i] = -Flux_Y[k][0][i];
+      // Flux_Y[k][ldy+1][i] = -Flux_Y[k][ldy][i];
+
+      /*bottom Wall*/
+      Speed_Int_Y[k][-1][i] = -Speed_Int_Y[k][0][i];
+      Speed_Int_Y[k][ldy][i] = -Speed_Int_Y[k][ldy-1][i];
+
+    }
+  }
+}
