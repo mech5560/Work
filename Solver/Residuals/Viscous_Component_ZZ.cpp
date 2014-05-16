@@ -1,8 +1,8 @@
 /*******************************************
- * Author: Michail Georgiou 
-*  Last Modified: Time-stamp: <2014-05-01 11:44:32 mike_georgiou>   
-*
-*
+ * Author: Michail Georgiou
+ *  Last Modified: Time-stamp: <2014-05-16 14:29:12 mike_georgiou>
+ *
+ *
 Viscous_Component_ZZ.cpp -- This function computes the Z component of the velocity
 residual of the Z momentum equation
 *
@@ -12,10 +12,10 @@ residual of the Z momentum equation
 #include"Residuals-inl.h"
 
 double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
-														double*** velocity_z,
-														double*** temperature, double Reynolds, 
-														double dx, double* dy, double dz,
-														int i, int j, int k)
+                            double*** velocity_z,
+                            double*** temperature, double Reynolds,
+                            double dx, double* dy, double dz,
+                            int i, int j, int k)
 
 {
 
@@ -24,7 +24,7 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
 
 
   //Calculation of the d/dz(dw/dz) component
-	double total_derivative_z[4];
+  double total_derivative_z[4];
   for (int vi=0; vi<4; vi++)
     {
 
@@ -39,49 +39,39 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
       total_derivative_z[vi]=derivative_zz[vi][0]+derivative_zz[vi][1];
 
     }
-	// Calculation of the d/dz(dv/dy) component 
-	  
-	//   Each derivative will be interpolated 
-	//   in the Z-direction in order to derive the necessary quantities
-	//   For this reason I am using the 2D  array, Derivative_ZY, to  compute all
-	//   the interpolated
-	//   quantities and then combine them to get the desired result
-	 
-	//   Each row of the Derivative_ZY array will contain the two quantities
-	//   needed to interpolated
-	//   in order to obtain the desired derivative
+  // Calculation of the d/dz(dv/dy) component
 
-      //k-3/2  
-      dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
-      derivative_zy[0][0] =Derivative(velocity_y[k-3][j+1][i],
-																			velocity_y[k-3][j-1][i],
-																			dy_total, 1);
+  //k-3/2
+  dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
+  derivative_zy[0][0] =Derivative(velocity_y[k-3][j+1][i],
+                                  velocity_y[k-3][j-1][i],
+                                  dy_total, 1);
 
-      dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
-      derivative_zy[0][1] =-Derivative(velocity_y[k][j+1][i],
-																			 velocity_y[k][j-1][i],
-																			 dy_total, 1);
+  dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
+  derivative_zy[0][1] =-Derivative(velocity_y[k][j+1][i],
+                                   velocity_y[k][j-1][i],
+                                   dy_total, 1);
 
-      //k-1/2
-      dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
-      derivative_zy[1][0] = Derivative(velocity_y[k-1][j+1][i],
-																			 velocity_y[k-1][j-1][i],
-																			 dy_total, 1);
-			derivative_zy[1][1] = derivative_zy[0][1];
+  //k-1/2
+  dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
+  derivative_zy[1][0] = Derivative(velocity_y[k-1][j+1][i],
+                                   velocity_y[k-1][j-1][i],
+                                   dy_total, 1);
+  derivative_zy[1][1] = derivative_zy[0][1];
 
-      //k+1/2
-			derivative_zy[2][0] = derivative_zy[0][1];
-      dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
-      derivative_zy[2][1] = Derivative(velocity_y[k+1][j+1][i],
-																			 velocity_y[k+1][j-1][i],
-																			 dy_total, 1);
+  //k+1/2
+  derivative_zy[2][0] = derivative_zy[0][1];
+  dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
+  derivative_zy[2][1] = Derivative(velocity_y[k+1][j+1][i],
+                                   velocity_y[k+1][j-1][i],
+                                   dy_total, 1);
 
-			//k+3/2
-			derivative_zy[3][0] = derivative_zy[0][1];
-      dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
-      derivative_zy[3][1] = Derivative(velocity_y[k+3][j+1][i],
-																			 velocity_y[k+3][j-1][i],
-																			 dy_total, 1);
+  //k+3/2
+  derivative_zy[3][0] = derivative_zy[0][1];
+  dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
+  derivative_zy[3][1] = Derivative(velocity_y[k+3][j+1][i],
+                                   velocity_y[k+3][j-1][i],
+                                   dy_total, 1);
 
   double total_derivative_y[4];
   for (int vi=0; vi<4; vi++)
@@ -95,20 +85,10 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
     }
 
 
-	 // Calculation of the d/dz(du/dx) component
+  // Calculation of the d/dz(du/dx) component
 
-	 //  Each derivative will be interpolated 
-	 //  in the Z-direction in order to derive the necessary quantities
-	 //  For this reason I am using the 2D Derivative_ZX array to  compute all the
-	 //  interpolated
-	 //  quantities and then combine them to get the desired result. In addition,
-	 //  I ll also have 
-	 //  to interpolate in the Z-Direction, since I am using higher order schemes
-	 
-	 //  For this reason, the length Derivative_ZX array is 4 in this case
-	
-	//k-3/2
-	//k-3
+  //k-3/2
+  //k-3
   //delta_1
   derivative_zx[0][0] = 4./(3.)*Derivative(velocity_x[k-3][j][i+1],
                                            velocity_x[k-3][j][i-1],
@@ -118,7 +98,7 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
                                             velocity_x[k-3][j][i-2],
                                             dx,4);
   //k
-	//delta_1
+  //delta_1
   derivative_zx[0][2] = 4./(3.)*Derivative(velocity_x[k][j][i+1],
                                            velocity_x[k][j][i-1],
                                            dx,2);
@@ -190,7 +170,7 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
 
 
 
-	//Computing the viscosities.
+  //Computing the viscosities.
   for (int vi=-2, vj=0; vi<2; vi++, vj++)
     {
       viscosity[vj]=

@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 11:28:19 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:23:32 mike_georgiou>
  *
  *
 Viscous_Component_YX.cpp -- This function computes the x component of the viscous
@@ -41,16 +41,6 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
     }
 
   // Calculation of the (du/dy) component
-
-  // Each derivative will be interpolated
-  // in the X-direction in order to derive the necessary quantities
-  // For this reason I am using the 2D Derivative_XY array to  compute all the
-  // interpolated
-  // quantities and then combine them to get the desired result
-
-  //Each row of the Derivative_XY array will contain the two quantities needed to
-  //interpolated
-  //in order to obtain the desired derivative*/
 
 
   //i-3/2
@@ -96,6 +86,7 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
                                    velocity_x[k][j-1][i+3],
                                    dy_total,1);
 
+
   //summing the derivatives in the y direction
   double total_derivative_y[4];
   for(int vi=0; vi<4; vi++)
@@ -105,7 +96,7 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
     }
 
   //Computing the viscosities.
-	double viscosity[4];
+  double viscosity[4];
   for (int vi=-2, vj=0; vi<2; vi++, vj++)
     {
       viscosity[vj]=

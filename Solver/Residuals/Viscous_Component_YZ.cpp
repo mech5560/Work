@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 11:33:52 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:25:14 mike_georgiou>
  *
  *
 Viscous_Component_YZ.cpp -- This function computes the Z component of the of the
@@ -12,7 +12,7 @@ velocity residual of the Y momentum equation
 #include"Residuals-inl.h"
 
 double Viscous_Component_YZ(double*** velocity_y, double*** velocity_z,
-                            double*** temperature, double Reynolds, 
+                            double*** temperature, double Reynolds,
                             double* dy, double dz,
                             int i, int j, int k)
 {
@@ -35,9 +35,9 @@ double Viscous_Component_YZ(double*** velocity_y, double*** velocity_z,
                                               dz,3);
 
       //computing the total derivative
-			total_derivative_z[vi]=0.;
-			for (int vj=0; vj<2; vj++)
-				total_derivative_z[vi]+=derivative_zz[vi][vj];
+      total_derivative_z[vi]=0.;
+      for (int vj=0; vj<2; vj++)
+        total_derivative_z[vi]+=derivative_zz[vi][vj];
 
     }
 

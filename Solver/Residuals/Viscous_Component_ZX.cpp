@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 11:39:08 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:26:50 mike_georgiou>
  *
  *
 Viscous_Component_ZX.cpp -- This function computes the X component of the velocity
@@ -71,12 +71,12 @@ double Viscous_Component_ZX(double*** velocity_x, double*** velocity_z,
   //i-1/2/
 
   //i-1
-  derivative_xz[0][2] = 4./3.*Derivative(velocity_x[k+1][j][i-1],
+  derivative_xz[1][0] = 4./3.*Derivative(velocity_x[k+1][j][i-1],
                                          velocity_x[k-1][j][i-1],
                                          dz,2);
 
   //delta_2
-  derivative_xz[0][3] = -1./3.*Derivative(velocity_x[k+2][j][i-1],
+  derivative_xz[1][1] = -1./3.*Derivative(velocity_x[k+2][j][i-1],
                                           velocity_x[k-2][j][i-1],
                                           dz,4);
 

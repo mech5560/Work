@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-15 12:47:45 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:16:47 mike_georgiou>
  *
  *
 Velocity_Residual_X.cpp -- This function computes the velocity residuals in the
@@ -10,10 +10,6 @@ the Y-direction.
 *
 * Written on Thursday, 17 April 2014.
 ********************************************/
-
-
-#include"../../Header_Files/Data.h"
-
 #include"Residuals.h"
 #include"Residuals-inl.h"
 

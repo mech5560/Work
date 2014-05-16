@@ -1,10 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
-<<<<<<< HEAD
- *  Last Modified: Time-stamp: <2014-05-01 12:34:39 mike_georgiou>
-=======
- *  Last Modified: Time-stamp: <2014-04-28 15:54:00 mike_georgiou>
->>>>>>> f21e7fe8f645d773ef1fa9df298631c3fb0aefe6
+ *  Last Modified: Time-stamp: <2014-05-15 15:16:18 mike_georgiou>
  *
  *
 Right_Hand_Side_Poisson.cpp -- This program computes the rhs of the poisson equation
@@ -48,8 +44,8 @@ void Right_Hand_Side_Poisson(double* rhs, double*** velocity_x,
                                     i,j,k);
 
 
-				derivatives[2]=Divergence_Z(velocity_z,dz,
-																		i, j, k);
+        derivatives[2]=Divergence_Z(velocity_z,dz,
+                                    i, j, k);
 
         divergence=0.;
         for (int vi=0; vi<3; vi++)
@@ -60,9 +56,9 @@ void Right_Hand_Side_Poisson(double* rhs, double*** velocity_x,
                      j, ldy,
                      k,ldz);
 
-				 double result=(density_derivative+divergence)/dt;
+        double result=(density_derivative+divergence)/dt;
 
-				rhs[index+1] = result;
+        rhs[index+1] = result;
 
 
       }

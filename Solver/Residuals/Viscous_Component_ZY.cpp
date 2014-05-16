@@ -1,8 +1,8 @@
 /*******************************************
- * Author: Michail Georgiou 
-*  Last Modified: Time-stamp: <2014-05-01 11:42:31 mike_georgiou>   
-*
-*
+ * Author: Michail Georgiou
+ *  Last Modified: Time-stamp: <2014-05-16 14:27:16 mike_georgiou>
+ *
+ *
 Viscous_Component_ZY.cpp -- This function computes the Y component of the velosity
 residuals in the Z momentum equation
 *
@@ -11,15 +11,15 @@ residuals in the Z momentum equation
 
 #include"Residuals-inl.h"
 
-double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z, 
-														double*** temperature, double Reynolds,
-														double* dy, double dz,
-														int i, int j, int k)
+double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z,
+                            double*** temperature, double Reynolds,
+                            double* dy, double dz,
+                            int i, int j, int k)
 {
 
 
   double derivative_yz[2][4], derivative_yy[2],
-		total_derivative_z[2],
+    total_derivative_z[2],
     viscosity[2], viscous_terms[2], dy_total;
 
 
@@ -37,7 +37,7 @@ double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z,
                                dy_total,1);
 
 
- // Calculation of the (dv/dz)
+  // Calculation of the (dv/dz)
   //j-1/2
   // j-1
   derivative_yz[0][0] = 9./(8.)*Derivative(velocity_y[k+1][j-1][i],

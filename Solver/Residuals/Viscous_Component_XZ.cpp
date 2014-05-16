@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-15 12:45:34 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:29:23 mike_georgiou>
  *
  *
 Viscous_Component_XY.cpp -- This function computes the viscous component of the
@@ -24,8 +24,6 @@ double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
   double total_derivative_z[4];
   for (int vi=0; vi<4; vi++)
     {
-      //initalizing the vector
-      total_derivative_z[vi]=0.;
 
       derivative_zz[vi][0] = 9./(8.)*Derivative(velocity_x[k+vi-1][j][i],
                                                 velocity_x[k+vi-2][j][i],
@@ -34,6 +32,10 @@ double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
       derivative_zz[vi][1] = -1./(8.)*Derivative(velocity_x[k+vi][j][i],
                                                  velocity_x[k+vi-3][j][i],
                                                  dz,3);
+
+      //initalizing the vector
+      total_derivative_z[vi]=0.;
+
 
       //summing the component into vectors
       for (int vj=0; vj<2; vj++)
@@ -130,7 +132,7 @@ double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
     {
       viscosity[vi]=
         Viscosity_Calculator(Interpolation(temperature[k+vi][j][i],
-                                           temperature[k+vi-1][j][i]));
+                                           temperature[k+vi-1][j][i])); 
     }
 
   for (int vi=0; vi<4; vi++)
@@ -140,12 +142,13 @@ double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
 
     }
 
-  double   viscous_component = 1./Reynolds*( 9./8.*Derivative(viscous_terms[2],
-                                                              viscous_terms[1],
-                                                              dz,1)-
-                                             1./8.*Derivative(viscous_terms[3],
-                                                              viscous_terms[0],
-                                                              dz,3));
+  double   viscous_component =
+    1./Reynolds*( 9./8.*Derivative(viscous_terms[2],
+				   viscous_terms[1],
+				   dz,1)-
+		  1./8.*Derivative(viscous_terms[3],
+				   viscous_terms[0],
+				   dz,3));
 
 
 

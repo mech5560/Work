@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-15 11:39:01 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:20:59 mike_georgiou>
  *
  *
 Viscous_Component_XY.cpp -- This function computes the viscous component of the
@@ -32,10 +32,9 @@ double Viscous_Component_XY(double*** velocity_x, double*** velocity_y,
                                dy_total,1);
 
 
-
-
-  // Calculation of the (dv/dx)
+  //Calculation of the (dv/dx)
   //j-1/2
+
   // j-1
   derivative_yx[0][0] = 9./(8.)*Derivative(velocity_y[k][j-1][i+1],
                                            velocity_y[k][j-1][i-1],

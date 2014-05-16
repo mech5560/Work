@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 13:15:45 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:01:44 mike_georgiou>
  *
  *
 Energy_Equation.cpp -- This function solves the energy equation of my
@@ -19,11 +19,11 @@ Lessani-Papalexandris paper.
 
 
 void Energy_Equation(double*** temperature_new, double*** temperature,
-										 double*** velocity_x, double*** velocity_y, 
-										 double*** velocity_z, 
-										 double*** rho, double Reynolds, double Prandtl,
-										 double  dx, double* dy,double dz, double dt,
-										 int ldx, int ldy,  int ldz)
+                     double*** velocity_x, double*** velocity_y,
+                     double*** velocity_z,
+                     double*** rho, double Reynolds, double Prandtl,
+                     double  dx, double* dy,double dz, double dt,
+                     int ldx, int ldy,  int ldz)
 {
 
   double convection;
@@ -42,13 +42,13 @@ void Energy_Equation(double*** temperature_new, double*** temperature,
                                     i,j,k);
         // convective Terms
         convection=Energy_Convection(temperature,
-																		 velocity_x,velocity_y,velocity_z,
-																		 dx,dy,dz,
-																		 i,j,k);
+                                     velocity_x,velocity_y,velocity_z,
+                                     dx,dy,dz,
+                                     i,j,k);
 
 
-				double denominator= 1./(Reynolds*Prandtl*rho[k][j][i]
-																*Heat_Capacity(temperature[k][j][i]));
+        double denominator= (Reynolds*Prandtl*rho[k][j][i]
+                                *Heat_Capacity(temperature[k][j][i]));
 
         temperature_new[k][j][i] =
           temperature[k][j][i] + dt*( -convection +(viscous_term/denominator));

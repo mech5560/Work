@@ -1,13 +1,16 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 11:59:20 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:13:53 mike_georgiou>
  *
  *
-Energy_Viscous.cpp -- This function computes the viscous term of the energy
-equation. In the streamwise and spanwise directions I am using fourth order
+Energy_Viscous.cpp -- This function computes the viscous term of the
+energy
+equation. In the streamwise and spanwise directions I am using fourth
+order
 accurate schemes and in the vertical second order accurate.
 
-To interpolate the conductivity i am using second order accurate interpolation
+To interpolate the conductivity i am using second order accurate
+interpolation
 in all the directions. I could easily change that at a later stage.
 *
 * Written on Thursday, 24 April 2014.
@@ -39,7 +42,7 @@ double Energy_Viscous(double*** temperature,
     }
 
 
-	//Interpolating the Conductivity
+  //Interpolating the Conductivity
   for(int vi=0; vi<4; vi++)
     {
       conductivity[vi]= Conductivity(Interpolation(temperature[k][j][i+vi-1],
@@ -72,9 +75,9 @@ double Energy_Viscous(double*** temperature,
     {
 
       conductivity[vi]= Conductivity(Interpolation_Y(temperature[k][j+vi][i],
-																										 dy[j+vi],
-																										 temperature[k][j+vi-1][i],
-																										 dy[j]));
+                                                     dy[j+vi],
+                                                     temperature[k][j+vi-1][i],
+                                                     dy[j]));
 
       conductivity[vi]= Conductivity(Interpolation(temperature[k][j+vi][i],
                                                    temperature[k][j+vi-1][i]));

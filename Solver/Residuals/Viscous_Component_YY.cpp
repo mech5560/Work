@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 17:19:33 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-16 14:29:21 mike_georgiou>
  *
  *
 Viscous_Component_YY.cpp -- This function computes
@@ -15,7 +15,7 @@ Y momentum equation
 
 double Viscous_Component_YY(double*** velocity_x, double*** velocity_y,
                             double*** velocity_z,
-														double*** temperature, double Reynolds,
+                            double*** temperature, double Reynolds,
                             double dx, double* dy, double dz,
                             int i, int j, int k)
 {
@@ -28,17 +28,18 @@ double Viscous_Component_YY(double*** velocity_x, double*** velocity_y,
   //Calculation of the d/dy(dv/dy)
   //j-1/2
   dy_total= dy[j]+dy[j-1];
-  derivative_yy[0] = Derivative(velocity_y[k][j][i], velocity_y[k][j-1][i],
-                                dy_total,1);
+  derivative_yy[0] = 
+    Derivative(velocity_y[k][j][i],velocity_y[k][j-1][i],
+	       dy_total,1);
 
   //j+1/2
   dy_total= dy[j+1]+dy[j];
-  derivative_yy[1] = Derivative(velocity_y[k][j+1][i], velocity_y[k][j][i],
-                                dy_total,1);
+  derivative_yy[1] = 
+    Derivative(velocity_y[k][j+1][i], velocity_y[k][j][i],
+	       dy_total,1);
 
 
   //Calculation of the d/dy(du/dx)
-
   double sum[3];
   for (int vi=0; vi<3; vi++)
     {
@@ -50,13 +51,13 @@ double Viscous_Component_YY(double*** velocity_x, double*** velocity_y,
       derivative_yx[vi][1]=-1./8.*Derivative(velocity_x[k][j+vi-1][i+3],
                                              velocity_x[k][j+vi-1][i-3],
                                              dx,6);
-			sum[vi]=0.;
+      sum[vi]=0.;
       for (int vj=0; vj<2; vj++)
-				{
-					sum[vi] += derivative_yx[vi][vj];
-				}
-    
-		}
+        {
+          sum[vi] += derivative_yx[vi][vj];
+        }
+
+    }
 
   double total_derivative_x[2];
   for (int vi=0; vi<2; vi++)
@@ -80,11 +81,11 @@ double Viscous_Component_YY(double*** velocity_x, double*** velocity_y,
                                              velocity_z[k-3][j+vi-1][i],
                                              dz,6);
 
-			sum[vi]=0.;
+      sum[vi]=0.;
       for (int vj=0; vj<2; vj++)
-				{
-					sum[vi] += derivative_yz[vi][vj];
-				}
+        {
+          sum[vi] += derivative_yz[vi][vj];
+        }
     }
 
 
@@ -118,7 +119,7 @@ double Viscous_Component_YY(double*** velocity_x, double*** velocity_y,
   /* Summing the X-component of the Viscous Term of the Y-Momentum equation*/
 
   dy_total=2.*dy[j];
-	
+
   double viscous_term =
     1./Reynolds*(Derivative(viscous_terms[1],
                             viscous_terms[0],
