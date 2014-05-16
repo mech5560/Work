@@ -11,15 +11,16 @@
 #include "Allocate-inl.h"
 
 
-void DeAllocator( Ar *Arr, 
-									int ldz, int ldy, int ldx,
-									int lx, int rx,
-									int ly, int ry,
-									int lz, int rz)
+void DeAllocator( Ar *Arr,
+                  int ldz, int ldy, int ldx,
+                  int lx, int rx,
+                  int ly, int ry,
+                  int lz, int rz)
 {
 
 
-   delete [] &Arr->dy[-ly];
+  delete [] &Arr->dy[-ly];
+  delete [] &Arr->y[-ly];
 
   Free_Matrix(Arr->velocity_x, lx,ly,lz);
   Free_Matrix(Arr->velocity_y, lx,ly,lz);

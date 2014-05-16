@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-01 17:15:48 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-16 09:15:39 mike_georgiou> */
 /*******************************************
  *   Author: Michail Georgiou
  * Allocator->cpp --  In this program I will put all the arrays that i have to
@@ -22,7 +22,7 @@ void Allocator( int ldx, int ldy, int ldz,
 {
 
   Arr->dy = new double[ldy+ly+ry];  Arr->dy+=ly;
-
+  Arr->y = new double[ldy+ly+ry];  Arr->y+=ly;
 
   //velocity Arrays - Expanded in all directions because of the calculation of
   //the convective fluxes
