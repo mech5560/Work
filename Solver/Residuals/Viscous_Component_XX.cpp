@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:19:32 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 14:59:52 mike_georgiou>
  *
  *
 Viscous_Component_XX.cpp -- This function computes the d/dx component of the
@@ -20,7 +20,6 @@ double Viscous_Component_XX(double*** velocity_x, double*** velocity_y,
   double derivative_xx[4][2],derivative_xz[4][4],derivative_xy[4][2],
     viscous_terms[4], viscosity[4], dy_total=0.;
 
-
   //Calculation of the du/dx component
   for (int vi=0; vi<4; vi++)
     {
@@ -39,7 +38,6 @@ double Viscous_Component_XX(double*** velocity_x, double*** velocity_y,
     {
       //initializing the vector
       total_derivative_x[vi]=0.;
-
       for (int vj=0; vj<2; vj++)
         {
           total_derivative_x[vi]+=derivative_xx[vi][vj];
@@ -48,16 +46,6 @@ double Viscous_Component_XX(double*** velocity_x, double*** velocity_y,
 
   // Calculation of the dv/dy component
 
-  // Each derivative will be interpolated
-  // in the X-direction in order to derive the necessary quantities
-
-  // For this reason I am using the 2D Derivative_XY array to  compute
-  // all the interpolated
-  // quantities and then combine them to get the desired result
-
-  // Each row of the Derivative_XY array will contain the two
-  // quantities  needed to interpolated
-  // in order to obtain the desired derivative
 
   //i-3/2
   dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
@@ -105,18 +93,6 @@ double Viscous_Component_XX(double*** velocity_x, double*** velocity_y,
     }
 
   // Calculation of the dw/dz component
-
-  // Each derivative will be interpolated
-  // in the X-direction in order to derive the necessary quantities
-
-  //  For this reason I am using the 2D Derivative_XZ array to  compute
-  //  all the interpolated quantities and then combine them to get the
-  //  desired result.
-
-  //In addition, I ll also have to interpolate in the Z-Direction, since
-  //I am using higher order schemes
-
-  //  For this reason, the length Derivative_XZ array is 4 in this case
 
   //delta_1
   derivative_xz[0][0] = 4./(3.)*Derivative(velocity_z[k+1][j][i-3],
@@ -188,7 +164,6 @@ double Viscous_Component_XX(double*** velocity_x, double*** velocity_y,
     {
       //initializing the vector
       total_derivative_z[vi]=0.;
-
       for (int vj=0; vj<4; vj++)
         {
           total_derivative_z[vi]+=derivative_xz[vi][vj];
@@ -212,6 +187,20 @@ double Viscous_Component_XX(double*** velocity_x, double*** velocity_y,
                                         -2./6.*(total_derivative_y[vi]+
                                                 total_derivative_z[vi]));
     }
+
+
+  // cout<<"xx"<<endl;
+
+  // cout<<-1./24.*(total_derivative_y[3]-total_derivative_y[0])+
+  //   9./8*(total_derivative_y[2]-total_derivative_y[1])<<endl;
+  
+  // cout<<-1./24.*(total_derivative_z[3]-total_derivative_z[0])+
+  //   9./8*(total_derivative_z[2]-total_derivative_z[1])<<endl;
+
+  // cout<<-1./24.*(total_derivative_x[3]-total_derivative_x[0])+
+  //   9./8*(total_derivative_x[2]-total_derivative_x[1])<<endl;
+
+
 
   double viscous_term =
     1./Reynolds*(9./8.*Derivative(viscous_terms[2],

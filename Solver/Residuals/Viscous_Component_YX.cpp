@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:23:32 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:00:23 mike_georgiou>
  *
  *
 Viscous_Component_YX.cpp -- This function computes the x component of the viscous
@@ -32,7 +32,6 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
                                                  velocity_y[k][j][i+vi-3],
                                                  dx,3);
 
-
       //initalizing the vector
       total_derivative_x[vi]=0.;
       for (int vj=0; vj<2; vj++)
@@ -41,8 +40,6 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
     }
 
   // Calculation of the (du/dy) component
-
-
   //i-3/2
   //i-3
   dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
@@ -57,7 +54,6 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
                                    dy_total,1);
 
   //i-1/2
-
   //i-1
   dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
   derivative_xy[1][0] = Derivative(velocity_x[k][j+1][i-1],
@@ -68,7 +64,6 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
   derivative_xy[1][1] = derivative_xy[0][1];
 
   //i+1/2
-
   //i
   derivative_xy[2][0] = derivative_xy[0][1];
   //i+1
@@ -112,6 +107,13 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
                                         +total_derivative_y[vi]);
     }
 
+
+  // cout<<"yx"<<endl;
+  // cout<<-1./24.*(total_derivative_y[3]-total_derivative_y[0])
+  //   +9./8.*(total_derivative_y[2]-total_derivative_y[1])<<endl;
+      
+
+
   /* Summing the X-component of the Viscous Term of the Y-Momentum equation*/
   double viscous_component =
     1./Reynolds*(9./8.*Derivative(viscous_terms[2],
@@ -120,9 +122,6 @@ double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
                  1./8.*Derivative(viscous_terms[3],
                                   viscous_terms[0],
                                   dx,3));
-
-
-
 
   return viscous_component;
 

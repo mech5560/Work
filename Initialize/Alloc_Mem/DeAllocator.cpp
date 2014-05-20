@@ -49,7 +49,7 @@ void DeAllocator( Ar *Arr,
 
 
   Free_Matrix(Arr->flux_x, 1,0,0);
-  Free_Matrix(Arr->flux_y, 0,1,0);
+  Free_Matrix(Arr->flux_y, 0,0,0);
   Free_Matrix(Arr->flux_z, 0,0,1);
 
   Free_Matrix(Arr->residual_x, 0, 0, 0);

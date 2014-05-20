@@ -1,15 +1,16 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:25:14 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:00:39 mike_georgiou>
  *
  *
-Viscous_Component_YZ.cpp -- This function computes the Z component of the of the
-velocity residual of the Y momentum equation
+Viscous_Component_YZ.cpp -- This function computes the Z component of
+the of the  velocity residual of the Y momentum equation
 *
 * Written on Thursday, 24 April 2014.
 ********************************************/
 
 #include"Residuals-inl.h"
+
 
 double Viscous_Component_YZ(double*** velocity_y, double*** velocity_z,
                             double*** temperature, double Reynolds,
@@ -19,8 +20,6 @@ double Viscous_Component_YZ(double*** velocity_y, double*** velocity_z,
 
   double derivative_zy[4][2], derivative_zz[4][2],
     viscous_terms[4], viscosity[4], dy_total;
-
-
 
   //Calculation of the d/dz(dv/dz) component
   double total_derivative_z[4];
@@ -41,12 +40,9 @@ double Viscous_Component_YZ(double*** velocity_y, double*** velocity_z,
 
     }
 
-
-
   //Calculation of the d/dz(dw/dy) component
 
   //k-3/2
-
   //k-3
   dy_total=dy[j-1]+2.*dy[j]+dy[j+1];
   derivative_zy[0][0] = Derivative(velocity_z[k-3][j+1][i],
@@ -119,6 +115,11 @@ double Viscous_Component_YZ(double*** velocity_y, double*** velocity_z,
                                         total_derivative_z[vi]);
     }
 
+
+
+  // cout<<"yz"<<endl;
+  // cout<<-1./24.*(total_derivative_y[3]-total_derivative_y[0])
+  //   +9./8*(total_derivative_y[2]-total_derivative_y[1])<<endl;
 
 
   double viscous_component =

@@ -4,25 +4,31 @@ LINKER     := $(CC)
 CFLAGS     := -std=c++0x -g3 -ggdb3 -Wall  -O3  -march=native  -fdevirtualize -fexpensive-optimizations \
           -fthread-jumps  -falign-functions  -falign-jumps -fdelete-null-pointer-checks -ftree-vrp\
           -falign-loops  -falign-labels -fcaller-saves -fcrossjumping -fgcse -ftree-slp-vectorize\
-					-ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -fvect-cost-model\
+	  -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -fvect-cost-model\
           -fstrict-aliasing -fstrict-overflow -ftree-switch-conversion\
           -ftree-tail-merge\
-	        -fvect-cost-model\
-					-fgcse-lm -fsched-interblock  -fsched-spec -fschedule-insns  -fschedule-insns2\
-					-fcse-follow-jumps  -fcse-skip-blocks -finline-small-functions\
+	  -fvect-cost-model\
+          -fgcse-lm -fsched-interblock  -fsched-spec -fschedule-insns  -fschedule-insns2\
+           -fcse-follow-jumps  -fcse-skip-blocks -finline-small-functions\
           -frerun-cse-after-loop -ftree-partial-pre -fipa-cp-clone\
-					-foptimize-sibling-calls -fregmove -ftree-vectorize\
+	   -foptimize-sibling-calls -fregmove -ftree-vectorize\
           -findirect-inlining -fipa-sra -fpartial-inlining -fpeephole2\
           -freorder-blocks\
-	        -freorder-functions
+	   -freorder-functions
 
 
 UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
 	 ./Solver/Energy_Viscous.o ./Solver/Energy_Convection.o\
-	 ./Initialize/Mesh_Generation/Cubic_Mesh.o\
+	 ./Initialize/Mesh_Generation/Cubic_Mesh.o \
+	./Initialize/Mesh_Generation/Hyperbolic_Mesh.o\
 	 ./Initialize/Alloc_Mem/Matrix_Allocator.o ./Initialize/Alloc_Mem/Free_Matrix.o\
-	 ./Initialize/Print_3D.o  ./Initialize/Initial_Conditions/Initial_Zero.o \
-	 ./Solver/Intermediate_Velocity_X.o ./Solver/Residuals/Velocity_Residual_X.o\
+	 ./Initialize/Print_3D.o ./Solver/Next_Step.o\
+	 ./Initialize/Initial_Conditions/Initial_Zero.o \
+	./Initialize/Initial_Conditions/Pertubation_Introducer.o\
+	./Initialize/Initial_Conditions/Initial_Reader.o\
+	./Initialize/Initial_Conditions/Initial_Conditions_Turbulence.o\
+	./Initialize/Initial_Conditions/Turbulence_Reader.o\
+	./Solver/Intermediate_Velocity_X.o ./Solver/Residuals/Velocity_Residual_X.o\
 	 ./Solver/Intermediate_Velocity_Y.o ./Solver/Residuals/Velocity_Residual_Y.o\
 	 ./Solver/Intermediate_Velocity_Z.o ./Solver/Residuals/Velocity_Residual_Z.o\
 	 ./Solver/Poisson/Vector_Constructor.o\
@@ -31,14 +37,23 @@ UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
 	 ./Solver/Velocity_Update_Y.o ./Solver/Velocity_Update_Z.o ./Solver/Flux_Evaluation_Y.o\
 	 ./Solver/Flux_Evaluation_X.o ./Solver/Flux_Evaluation_Z.o\
 	 ./Initialize/Initial_Conditions/Initial_One.o\
-	 ./Initialize/Print_3D_File.o ./Initialize/Alloc_Mem/Allocator.o ./Initialize/Alloc_Mem/DeAllocator.o\
-	 ./Initialize/Boundary_Conditions/BC_Flux.o ./Initialize/Print_2D_Data.o\
-	 ./Initialize/Boundary_Conditions/BC_Single.o ./Initialize/Print_3D_Plane.o\
-	 ./Initialize/Print_3D_Binary.o ./Header_Files/Density_Calculator.o ./Initialize/Initial_Conditions/Initial_Cos.o\
-	 ./Solver/Poisson/bcgc_solver.o ./Initialize/Print_3D_Single.o\
-	 ./Solver/Residuals/Convection_Term.o ./Solver/Residuals/Viscous_Component_XX.o ./Solver/Residuals/Viscous_Component_XY.o\
-	 ./Solver/Residuals/Viscous_Component_XZ.o ./Solver/Residuals/Viscous_Component_YX.o ./Solver/Residuals/Viscous_Component_YY.o\
-	 ./Solver/Residuals/Viscous_Component_YZ.o ./Solver/Residuals/Viscous_Component_ZX.o ./Solver/Residuals/Viscous_Component_ZY.o\
+	 ./Initialize/Boundary_Conditions/BC_Velocities.o\
+	 ./Initialize/Print_2D_Matrix.o\
+	 ./Initialize/Alloc_Mem/Allocator.o\
+	 ./Initialize/Alloc_Mem/DeAllocator.o\
+	 ./Initialize/Boundary_Conditions/BC_Flux.o ./Initialize/Print_2D_Curve.o\
+	 ./Initialize/Boundary_Conditions/BC_Single.o\
+	 ./Header_Files/Density_Calculator.o\
+	 ./Solver/Poisson/bcgc_solver.o\
+	 ./Solver/Residuals/Convection_Term.o\
+	 ./Solver/Residuals/Viscous_Component_XX.o\
+	 ./Solver/Residuals/Viscous_Component_XY.o\
+	 ./Solver/Residuals/Viscous_Component_XZ.o\
+	 ./Solver/Residuals/Viscous_Component_YX.o\
+	 ./Solver/Residuals/Viscous_Component_YY.o\
+	 ./Solver/Residuals/Viscous_Component_YZ.o\
+	 ./Solver/Residuals/Viscous_Component_ZX.o\
+	 ./Solver/Residuals/Viscous_Component_ZY.o\
 	 ./Solver/Residuals/Viscous_Component_ZZ.o
 
 TEST_OBJS := main.o

@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:27:16 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:00:58 mike_georgiou>
  *
  *
 Viscous_Component_ZY.cpp -- This function computes the Y component of the velosity
@@ -10,6 +10,10 @@ residuals in the Z momentum equation
 ********************************************/
 
 #include"Residuals-inl.h"
+
+#include<iostream>
+using namespace std;
+
 
 double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z,
                             double*** temperature, double Reynolds,
@@ -40,22 +44,22 @@ double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z,
   // Calculation of the (dv/dz)
   //j-1/2
   // j-1
-  derivative_yz[0][0] = 9./(8.)*Derivative(velocity_y[k+1][j-1][i],
+  derivative_yz[0][0] = 4./(3.)*Derivative(velocity_y[k+1][j-1][i],
                                            velocity_y[k-1][j-1][i],
                                            dz,2);
 
-  derivative_yz[0][1] = -1./(8.)*Derivative(velocity_y[k+3][j-1][i],
-                                            velocity_y[k-3][j-1][i],
-                                            dz,6);
+  derivative_yz[0][1] = -1./(3.)*Derivative(velocity_y[k+2][j-1][i],
+                                            velocity_y[k-2][j-1][i],
+                                            dz,4);
 
   // j
-  derivative_yz[0][2] = 9./(8.)*Derivative(velocity_y[k+1][j][i],
+  derivative_yz[0][2] = 4./(3.)*Derivative(velocity_y[k+1][j][i],
                                            velocity_y[k-1][j][i],
                                            dz,2);
 
-  derivative_yz[0][3] = -1./(8.)*Derivative(velocity_y[k+3][j][i],
-                                            velocity_y[k-3][j][i],
-                                            dz,6);
+  derivative_yz[0][3] = -1./(3.)*Derivative(velocity_y[k+2][j][i],
+                                            velocity_y[k-2][j][i],
+                                            dz,4);
 
   //j+1/2
   // j
@@ -63,13 +67,13 @@ double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z,
   derivative_yz[1][1] =derivative_yz[0][3];
 
   // j+1
-  derivative_yz[1][2] = 9./(8.)*Derivative(velocity_y[k+1][j+1][i],
+  derivative_yz[1][2] = 4./(3.)*Derivative(velocity_y[k+1][j+1][i],
                                            velocity_y[k-1][j+1][i],
                                            dz,2);
 
-  derivative_yz[1][3] = -1./(8.)*Derivative(velocity_y[k+3][j+1][i],
-                                            velocity_y[k-3][j+1][i],
-                                            dz,6);
+  derivative_yz[1][3] = -1./(3.)*Derivative(velocity_y[k+2][j+1][i],
+                                            velocity_y[k-2][j+1][i],
+                                            dz,4);
 
   //computing the interpolated derivative d/dy(dv/dz)
   double sum[2];
@@ -98,6 +102,13 @@ double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z,
                                        +total_derivative_z[vi]);
     }
 
+
+  // cout<<"zy"<<endl;
+  // cout<<total_derivative_z[1]-total_derivative_z[0]<<endl;
+
+
+
+
   //computing the viscous component in the y-direction
   dy_total=2.*dy[j];
   double viscous_component= 1./(Reynolds*dy_total)*(viscous_terms[1]-
@@ -105,7 +116,4 @@ double Viscous_Component_ZY(double*** velocity_y, double*** velocity_z,
 
 
   return viscous_component;
-
-
-
 }

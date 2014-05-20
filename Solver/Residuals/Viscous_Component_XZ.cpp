@@ -1,15 +1,20 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:29:23 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:00:10 mike_georgiou>
  *
  *
-Viscous_Component_XY.cpp -- This function computes the viscous component of the
-X-Momentum equation
+Viscous_Component_XY.cpp -- This function computes the viscous
+component of the X-Momentum equation
 *
 * Written on Wednesday, 23 April 2014.
 ********************************************/
 
 #include"Residuals-inl.h"
+
+// #include<iostream>
+// using namespace std;
+
+
 
 double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
                             double*** temperature, double Reynolds,
@@ -35,9 +40,6 @@ double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
 
       //initalizing the vector
       total_derivative_z[vi]=0.;
-
-
-      //summing the component into vectors
       for (int vj=0; vj<2; vj++)
         total_derivative_z[vi]+=derivative_zz[vi][vj];
 
@@ -138,9 +140,16 @@ double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
   for (int vi=0; vi<4; vi++)
     {
       viscous_terms[vi]=viscosity[vi]*(total_derivative_z[vi]
-                                       +0.5*total_derivative_x[vi]);
+                                       +total_derivative_x[vi]/2.);
 
     }
+
+  // cout<<"xz"<<endl;
+  // cout<<total_derivative_x[3]-total_derivative_x[0]<<endl;
+  // cout<<total_derivative_x[2]-total_derivative_x[1]<<endl;
+
+
+
 
   double   viscous_component =
     1./Reynolds*( 9./8.*Derivative(viscous_terms[2],

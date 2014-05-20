@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:20:59 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 14:59:59 mike_georgiou>
  *
  *
 Viscous_Component_XY.cpp -- This function computes the viscous component of the
@@ -10,7 +10,8 @@ X-Momentum equation
 ********************************************/
 #include"Residuals-inl.h"
 
-double Viscous_Component_XY(double*** velocity_x, double*** velocity_y,
+
+double Viscous_Component_XY(double*** velocity_x,double*** velocity_y, 
                             double*** temperature,double Reynolds,
                             double dx, double* dy,
                             int i, int j, int k)
@@ -36,22 +37,22 @@ double Viscous_Component_XY(double*** velocity_x, double*** velocity_y,
   //j-1/2
 
   // j-1
-  derivative_yx[0][0] = 9./(8.)*Derivative(velocity_y[k][j-1][i+1],
+  derivative_yx[0][0] = 4./(3.)*Derivative(velocity_y[k][j-1][i+1],
                                            velocity_y[k][j-1][i-1],
                                            dx,2);
 
-  derivative_yx[0][1] = -1./(8.)*Derivative(velocity_y[k][j-1][i+3],
-                                            velocity_y[k][j-1][i-3],
-                                            dx,6);
+  derivative_yx[0][1] = -1./(3.)*Derivative(velocity_y[k][j-1][i+2],
+                                            velocity_y[k][j-1][i-2],
+                                            dx,4);
 
   // j
-  derivative_yx[0][2] = 9./(8.)*Derivative(velocity_y[k][j][i+1],
+  derivative_yx[0][2] = 4./(3.)*Derivative(velocity_y[k][j][i+1],
                                            velocity_y[k][j][i-1],
                                            dx,2);
 
-  derivative_yx[0][3] = -1./(8.)*Derivative(velocity_y[k][j][i+3],
-                                            velocity_y[k][j][i-3],
-                                            dx,6);
+  derivative_yx[0][3] = -1./(3.)*Derivative(velocity_y[k][j][i+2],
+                                            velocity_y[k][j][i-2],
+                                            dx,4);
 
   //j+1/2
   // j
@@ -59,13 +60,13 @@ double Viscous_Component_XY(double*** velocity_x, double*** velocity_y,
   derivative_yx[1][1] =derivative_yx[0][3];
 
   // j+1
-  derivative_yx[1][2] = 9./(8.)*Derivative(velocity_y[k][j+1][i+1],
+  derivative_yx[1][2] = 4./(3.)*Derivative(velocity_y[k][j+1][i+1],
                                            velocity_y[k][j+1][i-1],
                                            dx,2);
 
-  derivative_yx[1][3] = -1./(8.)*Derivative(velocity_y[k][j+1][i+3],
-                                            velocity_y[k][j+1][i-3],
-                                            dx,6);
+  derivative_yx[1][3] = -1./(3.)*Derivative(velocity_y[k][j+1][i+2],
+                                            velocity_y[k][j+1][i-2],
+                                            dx,4);
 
   //computing the interpolated derivative d/dy(dv/dx)
   double sum[2];
@@ -88,7 +89,7 @@ double Viscous_Component_XY(double*** velocity_x, double*** velocity_y,
       viscosity[vi]=
         Viscosity_Calculator(Interpolation_Y(temperature[k][j+vi][i],
                                              dy[j+1],
-                                             temperature[k][j+vi-1][i],
+                                             temperature[k][j+vi-1][i], 
                                              dy[j]));
     }
 
@@ -97,6 +98,11 @@ double Viscous_Component_XY(double*** velocity_x, double*** velocity_y,
       viscous_terms[vi]=viscosity[vi]*(derivative_yy[vi]
                                        +total_derivative_x[vi]);
     }
+
+
+  // cout<<"xy"<<endl;
+  // cout<<total_derivative_x[1]-total_derivative_x[0]<<endl;
+
 
   //computing the viscous component in the y-direction
   dy_total=2.*dy[j];

@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-15 13:00:33 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-19 16:31:23 mike_georgiou> */
 
 #ifndef Functions
 #define Functions
@@ -15,6 +15,10 @@ void DeAllocator( Ar *Arr,
                   int lx, int rx,
                   int ly, int ry,
                   int lz, int rz);
+
+void Next_Step(Ar* Arr);
+
+
 
 void Density_Calculator(double*** rho,
                         double*** T,
@@ -56,6 +60,19 @@ void BC_Flux(double*** flux_x, double*** flux_y, double*** flux_z,
              int ly, int ry,
              int lz, int rz);
 
+void BC_Velocities(double*** velocity_x,
+                   double*** velocity_y,
+                   double*** velocity_z,
+                   int ldx, int ldy, int ldz,
+                   int lx, int rx,
+                   int ly, int ry,
+                   int lz, int rz,
+                   int index,
+                   double bc_x_top, double bc_x_bottom,
+                   double bc_y_top, double bc_y_bottom,
+                   double bc_z_top, double bc_z_bottom,
+                   double *dy);
+
 /* Energy Equation Functions */
 void Energy_Equation(double*** temperature_new, double*** temperature,
                      double*** velocity_x, double*** velocity_y, double***
@@ -72,9 +89,15 @@ void Energy_Equation_Corrector(double*** temperature_new,
                                double dx, double* dy, double dz, double dt,
                                int ldx, int ldy,  int ldz);
 
-void Cubic_Mesh( double *dy,
+void Cubic_Mesh( double *dy,double *y,
+		 double length_y,
                  int ldy,
                  int yl, int yr);
+
+void Hyperbolic_Mesh( double *dy, double *y,
+		      double length_y,
+		      int ldy,
+		      int yl, int yr);
 
 
 
@@ -90,35 +113,40 @@ void Initial_One( double ***Speed_X,
                   int ly, int ry,
                   int lx, int rx);
 
-void Initial_Cos( double ***Speed_X,
-                  int ldz, int ldy, int ldx,
-                  int lz, int rz,
-                  int ly, int ry,
-                  int lx, int rx);
+void Initial_Reader(double*** velocity_x, double*** velocity_y,
+		    double*** velocity_z,
+		    int ldx, int ldy, int ldz);
+
+void Pertubation_Introducer(double*** velocity_x, double***velocity_y, 
+			    double*** velocity_z,
+			    double length_x, double length_y, 
+			    double length_z,
+			    double dx, double *dy, double dz,
+			    int ldx, int ldy, int ldz);
+
+
+
+void Initial_Conditions_Turbulence(double*** velocity_x,
+                                   double*** velocity_y,
+                                   double*** velocity_z,
+                                   double Reynolds, double dt,
+                                   double dx, double* dy, double dz,
+                                   int ldx, int ldy, int ldz);
+
 
 void Print_3D(double ***A,
-              int ldz, int ldy, int ldx,
-              int zl,int  zr,
-              int yl, int yr,
-              int xl, int xr);
+	      int ldz, int ldy, int ldx,
+	      int time_index, char *mike);
 
-void Print_2D_Data(double*** data, double* dy,
+void Print_2D_Curve(double*** data, double* dy,
                    int ldx, int ldy, int ldz,
                    int time_index, char* name);
 
-void Print_3D_Single(double *A,
-                     int ldz, int ldy, int ldx,
-                     int time_index, char *mike);
 
-void Print_3D_File(double ***A,
-                   int ldz, int ldy, int ldx,
-                   int time_index, char*);
+void Print_2D_Matrix(double ***A,
+		     int ldz, int ldy, int ldx,
+		     int time_index, char*);
 
-void Print_3D_Plane(double ***A,
-                    int ldz, int ldy, int ldx,
-                    int zl,int  zr,
-                    int yl, int yr,
-                    int xl, int xr);
 
 void Print_3D_Binary(double ***A,
                      int ldz, int ldy, int ldx,

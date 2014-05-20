@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 12:51:40 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:57:44 mike_georgiou>
  *
  *
 Pertubation_Introducer.cpp -- This program introduces pertubations to my
@@ -21,9 +21,16 @@ void Pertubation_Introducer(double*** velocity_x, double*** velocity_y,
 
 
   double epsilon=1e-3;
+  double dy_single=length_y/(2*ldy);
+
+  double pi = 4.0*atan(1.);
 
   for (int k = 0; k < ldz; k++){
+
+    double y_local=0.;
     for (int j = 0; j < ldy; j++){
+
+	 y_local+=dy_single;
 
       double x_local=0.;
       for (int i = 0; i < ldx; i++){
@@ -35,26 +42,17 @@ void Pertubation_Introducer(double*** velocity_x, double*** velocity_y,
 	    *exp(-4*y[j]*y[j]));
 
 	 x_local+=dx/2.;
-	 velocity_y[k][j][i]  = epsilon * exp(-4*y[j]*y[j]);
+	 
+
+	 velocity_y[k][j][i]  = epsilon * exp(-4*y[j]*y[j])
+	   *sin(2.*pi*y_local);
+
+
 
       }
+      	 y_local+=dy_single;
     }
   }
-
-
-
-
-
-	// velocity_x[k][j][i] = 
-	//   velocity_x[k][j][i]* (1.+ e *sin(2.*pi*x_local/length_x)
-	// 			);
-	
-
-	// velocity_y[k][j][i] =  e*sin(pi*y[j]);
-
-
-
-
 
 
 }

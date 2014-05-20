@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-15 12:48:39 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 12:02:12 mike_georgiou>
  *
  *
 Intermediate_Velocity_X.cpp -- This function computes the u_tilda of my
@@ -39,12 +39,11 @@ void Intermediate_Velocity_X(double*** velocity_x_tilda,
     for (int j=0; j<ldy; j++){
       for (int i=0; i<ldx; i++){
 
-        velocity_x_tilda[k][j][i] = ((rho[k][j][i]*velocity_x[k][j][i] +
-
-                                      dt*(1.5*residual_x[k][j][i] -
-                                          0.5*residual_x_old[k][j][i] ) )
-
-                                     /rho_new[k][j][i]);
+        velocity_x_tilda[k][j][i] = 
+	  ((rho[k][j][i]*velocity_x[k][j][i] +
+	    dt*(1.5*residual_x[k][j][i] -
+		0.5*residual_x_old[k][j][i] ) )
+	  / rho_new[k][j][i]);
       }
     }
   }

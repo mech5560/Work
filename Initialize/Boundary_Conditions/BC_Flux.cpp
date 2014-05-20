@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- * Last Modified: Time-stamp: <2014-05-01 15:44:02 mike_georgiou>
+ * Last Modified: Time-stamp: <2014-05-19 16:26:10 mike_georgiou>
  *
  * BC_Flux.cpp -- In this program I will define  the boundary
  * conditions for my problem.
@@ -36,12 +36,12 @@ void BC_Flux(double*** flux_x, double*** flux_y, double*** flux_z,
       /*******Left-Periodic-BC************/
       /*flux_x Array*/
 
-      flux_x[k][j][-1] =  flux_x[k][j][ldx];
+      //  flux_x[k][j][-1] =  flux_x[k][j][ldx];
 
       /*******Right-Periodic-BC***********/
       /*flux_x Array   */
 
-      flux_x[k][j][ldx+1] =  flux_x[k][j][0];
+      //      flux_x[k][j][ldx+1] =  flux_x[k][j][0];
 
       for (int i=1; i<=lx; i++)
         { velocity_x_tilda[k][j][-i] =  velocity_x_tilda[k][j][ldx-i];}
@@ -59,11 +59,11 @@ void BC_Flux(double*** flux_x, double*** flux_y, double*** flux_z,
     for (int i = 0; i< ldx; i++){
       /******* "Back"-Periodic-BC************/
       /*flux_z Array*/
-      flux_z[-1][j][i] =  flux_z[ldz][j][i];
+      //flux_z[-1][j][i] =  flux_z[ldz][j][i];
 
       /*******"Front"-Periodic-BC***********/
       /*flux_z Array*/
-      flux_z[ldz+1][j][i] =  flux_z[0][j][i];
+      //      flux_z[ldz+1][j][i] =  flux_z[0][j][i];
 
       for (int k=1; k<=lz; k++)
         {
@@ -79,17 +79,17 @@ void BC_Flux(double*** flux_x, double*** flux_y, double*** flux_z,
   }
 
 
-	for (int k=0; k<ldz; k++){
-		for (int i=0; i<ldx; i++){
+  for (int k=0; k<ldz; k++){
+    for (int i=0; i<ldx; i++){
 
 
-			flux_y[k][-1][i]=-flux_y[k][0][i];
-			flux_y[k][ldy+1][i]=-flux_y[k][ldy][i];
-	
-			velocity_y_tilda[k][-1][i]= -velocity_y_tilda[k][0][i];
-			velocity_y_tilda[k][ldy][i]= -velocity_y_tilda[k][ldy-1][i];
-		}
-	}
+      // flux_y[k][-1][i]=-flux_y[k][0][i];
+      // flux_y[k][ldy+1][i]=-flux_y[k][ldy][i];
+
+      velocity_y_tilda[k][-1][i]= -velocity_y_tilda[k][0][i];
+      velocity_y_tilda[k][ldy][i]= -velocity_y_tilda[k][ldy-1][i];
+    }
+  }
 
 
 }

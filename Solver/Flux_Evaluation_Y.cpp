@@ -1,6 +1,6 @@
 /*******************************************
- * Author: Michail Georgiou 
- *  Last Modified: Time-stamp: <2014-04-30 18:58:20 mike_georgiou>   
+ * Author: Michail Georgiou
+ *  Last Modified: Time-stamp: <2014-05-19 16:26:32 mike_georgiou>
  *
  *
 Flux.cpp -- This programs computes the fluxes, with second order
@@ -19,19 +19,19 @@ non-uniform grid in this direction.
 
 void Flux_Evaluation_Y(double*** flux_y, double*** velocity_y,
                        double*** rho, double*** pressure,
-											 double* dy, double dt,
-											 int ldx, int ldy, int ldz)
+                       double* dy, double dt,
+                       int ldx, int ldy, int ldz)
 {
   for (int k=0; k<ldz;  k++){
-    for (int j=1; j<ldy-1; j++){
+    for (int j=1; j<ldy-11; j++){
       for (int i=0; i<ldx; i++){
 
         flux_y[k][j][i] =
-					Interpolation_Y(rho[k][j][i], velocity_y[k][j][i],dy[j],
-													rho[k][j-1][i], velocity_y[k][j-1][i],dy[j-1])
-					-
-					dt* Derivative_Y(pressure[k][j][i], dy[j],
-													 pressure[k][j-1][i], dy[j-1]);
+          Interpolation_Y(rho[k][j][i], velocity_y[k][j][i],dy[j],
+                          rho[k][j-1][i], velocity_y[k][j-1][i],dy[j-1])
+          -
+          dt* Derivative_Y(pressure[k][j][i], dy[j],
+                           pressure[k][j-1][i], dy[j-1]);
 
 
         //Forcing the non-slip boundary condition

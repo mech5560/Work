@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:26:50 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:01:05 mike_georgiou>
  *
  *
 Viscous_Component_ZX.cpp -- This function computes the X component of the velocity
@@ -11,6 +11,11 @@ residuals of the Z momentum equation
 
 
 #include"Residuals-inl.h"
+#include <iostream>
+
+using namespace std;
+
+
 
 double Viscous_Component_ZX(double*** velocity_x, double*** velocity_z,
                             double*** temperature, double Reynolds,
@@ -33,18 +38,17 @@ double Viscous_Component_ZX(double*** velocity_x, double*** velocity_z,
                                             dx,1);
 
       derivative_xx[vi][1]=-1./8.*Derivative(velocity_z[k][j][i+vi],
-                                             velocity_z[k][j][i+vi-3],
+                                             velocity_z[k][j][i+vi-3], 
                                              dx,3);
 
-			//computing the total derivative
-      total_derivative_x[vi]=derivative_xx[vi][0]+derivative_xx[vi][1];
+      //computing the total derivative
+      total_derivative_x[vi]=derivative_xx[vi][0]+derivative_xx[vi][1]; 
 
     }
 
   //Calculation of the d/dx(du/dz) component
 
   // i-3/2
-
   // i-3
   //\delta_1
   derivative_xz[0][0] = 4./3.*Derivative(velocity_x[k+1][j][i-3],
@@ -130,9 +134,8 @@ double Viscous_Component_ZX(double*** velocity_x, double*** velocity_z,
   //summing up the components
   for (int vi=0; vi<4; vi++)
     {
-      //initializing the vector
-      total_derivative_z[vi]=0.;
 
+      total_derivative_z[vi]=0.;
       for (int vj=0; vj<4; vj++)
         {
           total_derivative_z[vi]+=derivative_xz[vi][vj];
@@ -145,22 +148,31 @@ double Viscous_Component_ZX(double*** velocity_x, double*** velocity_z,
     {
       viscosity[vi]=
         Viscosity_Calculator(Interpolation(temperature[k][j][i+vi],
-                                           temperature[k+vi-1][j][i+vi-1]));
+                                           temperature[k][j][i+vi-1]));
     }
 
   for (int vi=0; vi<4; vi++)
     {
       viscous_terms[vi]=viscosity[vi]*(total_derivative_x[vi]
-                                       +0.5*total_derivative_z[vi]);
+                                       +total_derivative_z[vi]/2.);
 
     }
 
-  double   viscous_component = 1./Reynolds*( 9./8.*Derivative(viscous_terms[2],
-                                                              viscous_terms[1],
-                                                              dx,1)-
-                                             1./8.*Derivative(viscous_terms[3],
-                                                              viscous_terms[0],
-                                                              dx,3));
+
+
+  // cout<<"zx"<<endl;
+  // cout<<total_derivative_z[3]-total_derivative_z[0]<<endl;
+  // cout<<total_derivative_z[2]-total_derivative_z[1]<<endl;
+
+
+
+  double   viscous_component =
+    1./Reynolds*( 9./8.*Derivative(viscous_terms[2],
+				   viscous_terms[1],
+				   dx,1)-
+		  1./8.*Derivative(viscous_terms[3],
+				   viscous_terms[0],
+				   dx,3));
 
   return viscous_component;
 

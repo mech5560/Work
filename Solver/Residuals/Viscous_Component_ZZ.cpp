@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:29:12 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:00:49 mike_georgiou>
  *
  *
 Viscous_Component_ZZ.cpp -- This function computes the Z component of the velocity
@@ -11,12 +11,13 @@ residual of the Z momentum equation
 
 #include"Residuals-inl.h"
 
+
+
 double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
                             double*** velocity_z,
                             double*** temperature, double Reynolds,
                             double dx, double* dy, double dz,
                             int i, int j, int k)
-
 {
 
   double derivative_zz[4][2],derivative_zx[4][4],derivative_zy[4][2],
@@ -156,15 +157,13 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
                                             velocity_x[k+3][j][i-2],
                                             dx,4);
 
-
+  double total_derivative_x[4];
   for (int vi=0; vi<4; vi++)
     {
-      //initializing the vector
-      total_derivative_z[vi]=0.;
-
+      total_derivative_x[vi]=0.;
       for (int vj=0; vj<4; vj++)
         {
-          total_derivative_z[vi]+=derivative_zx[vi][vj];
+          total_derivative_x[vi]+=derivative_zx[vi][vj];
         }
     }
 
@@ -182,10 +181,23 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
   //equation
   for (int vi=0; vi<4; vi++)
     {
-      viscous_terms[vi] =viscosity[vi]*(4./3.*total_derivative_z[vi]
-                                        -2./6.*(total_derivative_y[vi]+
-                                                total_derivative_z[vi]));
+      viscous_terms[vi] =
+	viscosity[vi]*(4./3.*total_derivative_z[vi]
+		       -2./6.*(total_derivative_y[vi]+
+			       total_derivative_x[vi]));
     }
+
+
+  // cout<<"zz"<<endl;
+  // cout<<total_derivative_x[3]-total_derivative_x[0]<<endl;
+  // cout<<total_derivative_x[2]-total_derivative_x[1]<<endl;
+
+  // cout<<total_derivative_y[3]-total_derivative_y[0]<<endl;
+  // cout<<total_derivative_y[2]-total_derivative_y[1]<<endl;
+
+
+
+
 
   double viscous_term =
     1./Reynolds*(9./8.*Derivative(viscous_terms[2],

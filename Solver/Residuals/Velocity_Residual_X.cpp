@@ -1,12 +1,12 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:16:47 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 15:01:15 mike_georgiou>
  *
  *
-Velocity_Residual_X.cpp -- This function computes the velocity residuals in the
-X-direction (eq. 28 lessani-papalexandris paper). Still, fourth order accuracy
-is used for the uniform grid direction (X and Z) and second order accuracy for
-the Y-direction.
+Velocity_Residual_X.cpp -- This function computes the velocity
+residuals in the X-direction (eq. 28 lessani-papalexandris
+paper). Still, fourth order  accuracy  is used for the uniform grid
+direction (X and Z) and second order accuracy for  the Y-direction.
 *
 * Written on Thursday, 17 April 2014.
 ********************************************/
@@ -15,7 +15,8 @@ the Y-direction.
 
 void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
                           double*** velocity_y, double*** velocity_z,
-                          double*** flux_x, double*** flux_y, double*** flux_z,
+                          double*** flux_x, double*** flux_y, 
+			  double*** flux_z,
                           double*** temperature, double Reynolds,
 			  double source,
                           double dx, double* dy, double dz,
@@ -43,26 +44,31 @@ void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
                                     i, j, k);
 
         //Viscous Term XX
-        viscous_components[0] = Viscous_Component_XX(velocity_x,velocity_y,
-                                                     velocity_z,
-                                                     temperature, Reynolds,
-                                                     dx, dy, dz,
-                                                     i, j, k);
+        viscous_components[0] = 
+	  Viscous_Component_XX(velocity_x,velocity_y,
+			       velocity_z,
+			       temperature, Reynolds,
+			       dx, dy, dz,
+			       i, j, k);
 
 
         //Viscous Term XY
-        viscous_components[1] = Viscous_Component_XY(velocity_x,velocity_y,
-                                                     temperature, Reynolds,
-                                                     dx, dy,
-                                                     i, j, k);
+        viscous_components[1] =
+	  Viscous_Component_XY(velocity_x,velocity_y,
+			       temperature, Reynolds,
+			       dx, dy,
+			       i, j, k);
 
         //Viscous Term XY
-        viscous_components[2] = Viscous_Component_XZ(velocity_x,velocity_z,
-                                                     temperature, Reynolds,
-                                                     dx, dz,
-                                                     i, j, k);
+        viscous_components[2] =
+	  Viscous_Component_XZ(velocity_x,velocity_z,
+			       temperature, Reynolds,
+			       dx, dz,
+			       i, j, k);
 
-        viscous_total=0.;
+
+
+	viscous_total=0.;
         for(int index=0; index<3; index++)
           viscous_total += viscous_components[index];
 
@@ -71,6 +77,5 @@ void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
       }
     }
   }
-
 
 }

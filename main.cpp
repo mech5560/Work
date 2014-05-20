@@ -21,7 +21,6 @@ int main (int argc, char *argv[])
 
   //Defining the number of solution points in each direction
   length_x = 4.; length_y =2.; length_z=2.;
-
   ldx=62; ldy=31; ldz=31;
 
   //Calculating dx and dz
@@ -43,8 +42,8 @@ int main (int argc, char *argv[])
 
   Allocator(ldx,ldy,ldz,
             left_x,right_x,
-            left_y,right_y,
-            left_z,right_z,
+            left_y,right_y, 
+	    left_z,right_z,
             &Arr);
 
 
@@ -79,49 +78,33 @@ int main (int argc, char *argv[])
   //////////////////Initial Conditions/////////////////////////
   /////////////////////////////////////////////////////////////
 
-  //Assigning zero Initial conditions for the velocities and Arr.Temperature
-
   ////Initializing the Velocities
-  Initial_Reader( Arr.velocity_x,  Arr.velocity_y,
-  		  Arr.velocity_z,
-  		  ldx,  ldy,  ldz);
+  // Initial_Reader( Arr.velocity_x,  Arr.velocity_y,
+  // 		  Arr.velocity_z,
+  // 		  ldx,  ldy,  ldz);
 
-  Pertubation_Introducer( Arr.velocity_x,  Arr.velocity_y,
-  			  Arr.velocity_z,
-  			  length_x,  length_y,
-  			  length_z,
-  			  dx,  Arr.y,  dz,
-  			  ldx,  ldy,  ldz);
+  // Pertubation_Introducer( Arr.velocity_x,  Arr.velocity_y,
+  // 			  Arr.velocity_z,
+  // 			  length_x,  length_y,
+  // 			  length_z,
+  // 			  dx,  Arr.y,  dz,
+  // 			  ldx,  ldy,  ldz);
 
-  // Print_2D_Curve(Arr.velocity_x, Arr.dy,ldz,ldy,ldx,0,"X0");
-  // Print_2D_Curve(Arr.velocity_y, Arr.dy,ldz,ldy,ldx,0,"Y0");
+  // Print_2D_Matrix(Arr.velocity_x, ldz,ldy,ldx,0,"X0");
+  // Print_2D_Matrix(Arr.velocity_y, ldz,ldy,ldx,0,"Y0");
 
-  BC_Single(Arr.velocity_x,
-            ldx, ldy, ldz,
-            left_x,right_x,
-            left_y,right_y,
-            left_z,right_z,
-            1,
-            velocity_top, velocity_bottom,
-            Arr.dy);
-
-  BC_Single(Arr.velocity_y,
-            ldx, ldy, ldz,
-            left_x,right_x,
-            left_y,right_y,
-            left_z,right_z,
-            1,
-            velocity_top, velocity_bottom,
-            Arr.dy);
-
-  BC_Single(Arr.velocity_z,
-            ldx, ldy, ldz,
-            left_x,right_x,
-            left_y,right_y,
-            left_z,right_z,
-            1,
-            velocity_top, velocity_bottom,
-            Arr.dy);
+  BC_Velocities( Arr.velocity_x,
+  		 Arr.velocity_y,
+  		 Arr.velocity_z,
+  		 ldx, ldy, ldz,
+  		 left_x, right_x,
+  		 left_y, right_y,
+  		 left_z, right_z,
+  		 1,
+  		 velocity_x_top, velocity_x_bottom,
+  		 velocity_y_top, velocity_y_bottom,
+  		 velocity_z_top, velocity_z_bottom,
+  		 Arr.dy);
 
   //Initializing the Arr.temperature
   Initial_One(Arr.temperature,
@@ -129,8 +112,7 @@ int main (int argc, char *argv[])
               left_x,right_x,
               left_y,right_y,
               left_z,right_z);
-
-
+  
   BC_Single(Arr.temperature,
             ldx, ldy, ldz,
             left_x,right_x,
@@ -145,7 +127,6 @@ int main (int argc, char *argv[])
   Density_Calculator(Arr.rho_old,
                      Arr.temperature,
                      ldx, ldy, ldz);
-
   BC_Single(Arr.rho_old,
             ldx, ldy, ldz,
             left_x,right_x,
@@ -159,7 +140,6 @@ int main (int argc, char *argv[])
   Density_Calculator(Arr.rho,
                      Arr.temperature,
                      ldx, ldy, ldz);
-
   BC_Single(Arr.rho,
             ldx, ldy, ldz,
             left_x,right_x,
@@ -189,16 +169,16 @@ int main (int argc, char *argv[])
                     dz, dt,
                     ldx,  ldy,  ldz+1);
 
-  //Assigning the BC for the Fluxes and the Intermediate Velocities
-  BC_Flux(Arr.flux_x, Arr.flux_y, Arr.flux_z,
-          Arr.velocity_x_tilda, Arr.velocity_y_tilda, Arr.velocity_z_tilda,
-          ldx, ldy, ldz,
-          left_x, right_x,
-          left_y, right_y,
-          left_z, right_z);
+  // //Assigning the BC for the Fluxes and the Intermediate Velocities
+  // BC_Flux(Arr.flux_x, Arr.flux_y, Arr.flux_z,
+  //         Arr.velocity_x_tilda, Arr.velocity_y_tilda, Arr.velocity_z_tilda,
+  //         ldx, ldy, ldz,
+  //         left_x, right_x,
+  //         left_y, right_y,
+  //         left_z, right_z);
 
 
-  //Initializing the Arr.Residuals at the n-1 time
+  //initializing the Arr.Residuals at the n-1 time
   //In order to do that I will use the Velosity Residual Functions.
   //but with the initial values velocities as an input
   Velocity_Residual_X( Arr.residual_x_old,
@@ -261,6 +241,7 @@ int main (int argc, char *argv[])
 
       /*Computing Arr.rho_Star*/
       Density_Calculator(Arr.rho_new, Arr.temperature_new, ldx, ldy, ldz);
+
       BC_Single(Arr.rho_new,
                 ldx,ldy,ldz,
                 left_x,right_x,
@@ -326,7 +307,7 @@ int main (int argc, char *argv[])
 
       /*solving the Poisson Equation*/
       BCSG(s_a, ij_a, result, rhs, precond_a,
-		    1e-10, 3000, dim_a, flag);
+	   1e-10, 3000, dim_a, flag);
       if(flag==1)
         {
           cout<<time_index<<endl;
@@ -364,38 +345,26 @@ int main (int argc, char *argv[])
                         Arr.dy, dt,
                         ldx,  ldy,  ldz);
 
-
       Velocity_Update_Z(Arr.velocity_z_new,  Arr.velocity_z_tilda,
                         Arr.rho_new, Arr.pressure,
                         dz, dt,
                         ldx,  ldy,  ldz);
 
-      BC_Single(Arr.velocity_x_new,
-                ldx, ldy, ldz,
-                left_x,right_x,
-                left_y,right_y,
-                left_z,right_z,
-                1,
-                velocity_top, velocity_bottom,
-                Arr.dy);
+      
+      BC_Velocities( Arr.velocity_x_new,
+		     Arr.velocity_y_new,
+		     Arr.velocity_z_new,
+		     ldx, ldy, ldz,
+		     left_x, right_x,
+		     left_y, right_y,
+		     left_z, right_z,
+		     1,
+		     velocity_x_top, velocity_x_bottom,
+		     velocity_y_top, velocity_y_bottom,
+		     velocity_z_top, velocity_z_bottom,
+		     Arr.dy);
 
-      BC_Single(Arr.velocity_y_new,
-                ldx, ldy, ldz,
-                left_x,right_x,
-                left_y,right_y,
-                left_z,right_z,
-                1,
-                velocity_top, velocity_bottom,
-                Arr.dy);
 
-      BC_Single(Arr.velocity_z_new,
-                ldx, ldy, ldz,
-                left_x,right_x,
-                left_y,right_y,
-                left_z,right_z,
-                1,
-                velocity_top, velocity_bottom,
-                Arr.dy);
 
       /*Updating the Auxiliary Arr.Fluxes in order to proceed at
         the Corrector Stage
@@ -405,27 +374,15 @@ int main (int argc, char *argv[])
                         dx, dt,
                         ldx+1,  ldy,  ldz);
 
-
       Flux_Evaluation_Y(Arr.flux_y, Arr.velocity_y_tilda,
                         Arr.rho_new, Arr.pressure,
                         Arr.dy, dt,
                         ldx,  ldy+1,  ldz);
 
-
       Flux_Evaluation_Z(Arr.flux_z, Arr.velocity_z_tilda,
                         Arr.rho_new,  Arr.pressure,
                         dx, dt,
                         ldx,  ldy,  ldz+1);
-
-
-
-      /*Applying the Boundary conditions to the computed fluxes*/
-      BC_Flux(Arr.flux_x, Arr.flux_y, Arr.flux_z,
-              Arr.velocity_x_tilda, Arr.velocity_y_tilda, Arr.velocity_z_tilda,
-              ldx, ldy, ldz,
-              left_x, right_x,
-              left_y, right_y,
-              left_z, right_z);
 
 
       /////////////////////////////////////////////////////////////
@@ -548,7 +505,7 @@ int main (int argc, char *argv[])
       //                   ldx,  ldy,  ldz);
       // /*Implementing the Velocity  boundary conditions for the next step*/
 
-      // BC_Single(Arr.velocity_x,
+      // BC_Single(Arr.velocity_x_new,
       //           ldx, ldy, ldz,
       //           left_x,right_x,
       //           left_y,right_y,
@@ -557,7 +514,7 @@ int main (int argc, char *argv[])
       //           velocity_top, velocity_bottom,
       //           Arr.dy);
 
-      // BC_Single(Arr.velocity_y,
+      // BC_Single(Arr.velocity_y_new,
       //           ldx, ldy, ldz,
       //           left_x,right_x,
       //           left_y,right_y,
@@ -566,7 +523,7 @@ int main (int argc, char *argv[])
       //           velocity_top, velocity_bottom,
       //           Arr.dy);
 
-      // BC_Single(Arr.velocity_z,
+      // BC_Single(Arr.velocity_z_new,
       //           ldx, ldy, ldz,
       //           left_x,right_x,
       //           left_y,right_y,
@@ -574,6 +531,7 @@ int main (int argc, char *argv[])
       //           1,
       //           velocity_top, velocity_bottom,
       //           Arr.dy);
+
 
       // /*Updating the Auxiliary Arr.Fluxes in order to proceed at
       //   the next timestep*/
@@ -594,78 +552,33 @@ int main (int argc, char *argv[])
       //                   dx, dt,
       //                   ldx,  ldy,  ldz+1);
 
-
-
-      // BC_Flux(Arr.flux_x, Arr.flux_y, Arr.flux_z,
-      //         Arr.velocity_x_tilda, Arr.velocity_y_tilda, Arr.velocity_z_tilda,
-      //         ldx, ldy, ldz,
-      //         left_x, right_x,
-      //         left_y, right_y,
-      //         left_z, right_z);
-
       ////////////////////////////////////////////////////////////////
       ////////////////End of the Corrector Stage /////////////////////
       ///////////////////////////////////////////////////////////////
 
-      // Enforcing the Z component of the velocity to be zero
-      Initial_Zero(Arr.velocity_z_new,
-		  ldx, ldy, ldz,
-		  left_x,right_x,
-		  left_y,right_y,
-		  left_z,right_z);
 
 
-
-
-      if (time_index%100==0)
+      if (time_index%1000==0)
         {
-          Print_2D_Matrix(Arr.velocity_x_new,ldz,ldy,ldx,time_index,"X"); 
-          Print_2D_Matrix(Arr.velocity_y_new,ldz,ldy,ldx,time_index,"Y");
-          Print_2D_Matrix(Arr.velocity_z_new,ldz,ldy,ldx,time_index,"Z");
+          Print_2D_Matrix(Arr.velocity_x_new,ldz,ldy,ldx,
+			  time_index,"X"); 
+
+          Print_2D_Matrix(Arr.velocity_y_new,ldz,ldy,ldx,
+			  time_index,"Y");
+
+          Print_2D_Matrix(Arr.velocity_z_new,ldz,ldy,ldx,
+			  time_index,"Z"); 
+
           Print_2D_Matrix(Arr.pressure,ldz,ldy,ldx,time_index,"P");
 
-          Print_2D_Curve(Arr.velocity_x_new, Arr.dy,ldz,ldy,ldx,time_index,"2d");
+          Print_2D_Curve(Arr.velocity_x_new,
+			 Arr.dy,ldz,ldy,ldx,time_index,"2d"); 
           cout<<time_index<<endl;
 
         }
 
+      Next_Step(&Arr);
 
-      /*Passing the data to proceed  to the next time step*/
-      Temp=Arr.velocity_x;
-      Arr.velocity_x= Arr.velocity_x_new;
-      Arr.velocity_x_new = Temp;
-
-      Temp=Arr.velocity_y;
-      Arr.velocity_y= Arr.velocity_y_new;
-      Arr.velocity_y_new = Temp;
-
-      Temp=Arr.velocity_z;
-      Arr.velocity_z= Arr.velocity_z_new;
-      Arr.velocity_z_new = Temp;
-
-      Temp=Arr.temperature;
-      Arr.temperature = Arr.temperature_new;
-      Arr.temperature_new = Temp;
-
-      Temp = Arr.rho_old;
-      Arr.rho_old = Arr.rho;
-      Arr.rho = Temp;
-
-      Temp = Arr.rho;
-      Arr.rho = Arr.rho_new;
-      Arr.rho_new = Temp;
-
-      Temp = Arr.residual_x_old;
-      Arr.residual_x_old = Arr.residual_x;
-      Arr.residual_x = Temp;
-
-      Temp = Arr.residual_y_old;
-      Arr.residual_y_old = Arr.residual_y;
-      Arr.residual_y = Temp;
-
-      Temp = Arr.residual_z_old;
-      Arr.residual_z_old = Arr.residual_z;
-      Arr.residual_z = Temp;
     }
 
   /*Releasing the allocated memory*/

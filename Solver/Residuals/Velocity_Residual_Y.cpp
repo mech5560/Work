@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-15 12:48:02 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-19 15:01:27 mike_georgiou> */
 /*
 
   This function will calculate the Velocity Residual in the Y-Momentum
@@ -11,8 +11,6 @@
 
 #include"Residuals.h"
 #include"Residuals-inl.h"
-
-#include"../../Header_Files/Data.h"
 
 void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
                           double*** velocity_y,double*** velocity_z,
@@ -41,30 +39,35 @@ void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
                                     i, j, k);
 
         //Viscous Term YX
-        viscous_components[0]= Viscous_Component_YX(velocity_x, velocity_y,
-                                                    temperature, Reynolds,
-                                                    dx, dy,
-                                                    i, j, k);
+        viscous_components[0]= 
+	  Viscous_Component_YX(velocity_x, velocity_y,
+			       temperature, Reynolds,
+			       dx, dy,
+			       i, j, k);
 
         //Viscous Term YY
-        viscous_components[1]= Viscous_Component_YY(velocity_x, velocity_y,
-                                                    velocity_z,
-                                                    temperature, Reynolds,
-                                                    dx, dy,dz,
-                                                    i, j, k);
+        viscous_components[1]= 
+	  Viscous_Component_YY(velocity_x, velocity_y,
+			       velocity_z,
+			       temperature, Reynolds,
+			       dx, dy,dz,
+			       i, j, k);
 
 
         //Viscous Term YZ
-        viscous_components[2]= Viscous_Component_YZ(velocity_y, velocity_z,
-                                                    temperature, Reynolds,
-                                                    dy,dz,
-                                                    i, j, k);
+        viscous_components[2]= 
+	  Viscous_Component_YZ(velocity_y, velocity_z,
+			       temperature, Reynolds,
+			       dy,dz,
+			       i, j, k);
+
 
         viscous_total=0.;
         for(int index=0; index<3; index++)
           viscous_total += viscous_components[index];
 
         residual_y[k][j][i] = -convection + viscous_total + source;
+
 
 
       }

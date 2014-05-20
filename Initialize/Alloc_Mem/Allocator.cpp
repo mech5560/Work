@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-16 09:15:39 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-19 16:25:41 mike_georgiou> */
 /*******************************************
  *   Author: Michail Georgiou
  * Allocator->cpp --  In this program I will put all the arrays that i have to
@@ -166,7 +166,7 @@ void Allocator( int ldx, int ldy, int ldz,
 
   Arr->flux_y = Matrix_Allocator(ldx, ldy+1, ldx,
                                  0,0,
-                                 1,1,
+                                 0,0,
                                  0,0);
 
   Arr->flux_z = Matrix_Allocator(ldx, ldy, ldz+1,

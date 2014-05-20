@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-15 12:49:28 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-19 12:03:35 mike_georgiou>
  *
  *
 Intermediate_Velocity_Y.cpp -- This function computes the v_tilda of my
@@ -39,9 +39,10 @@ void Intermediate_Velocity_Y(double*** velocity_y_tilda,
       for (int i=0; i<ldx; i++){
 
 
-        velocity_y_tilda[k][j][i] = (rho[k][j][i]*velocity_y[k][j][i] +
-                                     dt*(1.5*residual_y[k][j][i] -
-                                         0.5*residual_y_old[k][j][i]) )
+        velocity_y_tilda[k][j][i] = 
+	  (rho[k][j][i]*velocity_y[k][j][i] +
+	   dt*(1.5*residual_y[k][j][i] -
+	       0.5*residual_y_old[k][j][i]) )
           /rho_new[k][j][i];
 
 
