@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-19 16:31:23 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-23 12:11:46 mike_georgiou> */
 
 #ifndef Functions
 #define Functions
@@ -52,13 +52,12 @@ void BC_Single(double ***data,
 
 
 
-void BC_Flux(double*** flux_x, double*** flux_y, double*** flux_z,
-             double*** velocity_x_tilda, double*** velocity_y_tilda,
-             double*** velocity_z_tilda,
-             int ldx, int ldy, int ldz,
-             int lx, int rx,
-             int ly, int ry,
-             int lz, int rz);
+void BC_Tilda(double*** velocity_x_tilda, double*** velocity_y_tilda,
+	      double*** velocity_z_tilda,
+	      int ldx, int ldy, int ldz,
+	      int lx, int rx,
+	      int ly, int ry,
+	      int lz, int rz);
 
 void BC_Velocities(double*** velocity_x,
                    double*** velocity_y,
@@ -71,7 +70,7 @@ void BC_Velocities(double*** velocity_x,
                    double bc_x_top, double bc_x_bottom,
                    double bc_y_top, double bc_y_bottom,
                    double bc_z_top, double bc_z_bottom,
-                   double *dy);
+                   double *dy,double dx, double time);
 
 /* Energy Equation Functions */
 void Energy_Equation(double*** temperature_new, double*** temperature,
@@ -117,6 +116,16 @@ void Initial_Reader(double*** velocity_x, double*** velocity_y,
 		    double*** velocity_z,
 		    int ldx, int ldy, int ldz);
 
+void Initial_Christos(double*** velocity_x, double*** velocity_y,
+		      double*** velocity_z,
+		      double dx,
+		      int ldx, int ldy, int ldz);
+
+void Initial_Brown_2(double*** velocity_x, double*** velocity_y,
+		     double*** velocity_z,
+		     double dx, double* dy,
+		     int ldx, int ldy, int ldz);
+
 void Pertubation_Introducer(double*** velocity_x, double***velocity_y, 
 			    double*** velocity_z,
 			    double length_x, double length_y, 
@@ -147,6 +156,18 @@ void Print_2D_Matrix(double ***A,
 		     int ldz, int ldy, int ldx,
 		     int time_index, char*);
 
+void Print_2D_Matrix_Ghost(double ***A,
+			   int ldz, int ldy, int ldx,
+			   int, int,
+			   int, int,
+			   int, int,
+			   int time_index, char*);
+
+
+void Print_1D_Matrix(double *A,
+		     int ldz, int ldy, int ldx,
+		     int time_index, char*);
+
 
 void Print_3D_Binary(double ***A,
                      int ldz, int ldy, int ldx,
@@ -159,6 +180,7 @@ void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
                           double*** temperature, double Reynolds,
 			  double source,
                           double dx, double* dy, double dz,
+			  double time,
                           int ldx, int ldy, int ldz);
 
 void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
@@ -167,14 +189,18 @@ void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
                           double*** temperature, double Reynolds,
 			  double source,
                           double dx, double* dy, double dz,
+			  double time,
                           int ldx, int ldy, int ldz);
 
 
 void Velocity_Residual_Z( double*** residual_z, double*** velocity_x,
                           double*** velocity_y, double*** velocity_z,
-                          double*** flux_x, double*** flux_y, double*** flux_z,
-                          double*** temperature, double Reynolds, double source,
+                          double*** flux_x, double*** flux_y,
+			  double*** flux_z,
+                          double*** temperature, double Reynolds,
+			  double source,
                           double dx, double* dy, double dz,
+			  double time,
                           int ldx, int ldy, int ldz);
 
 
@@ -188,7 +214,8 @@ void Intermediate_Velocity_X(double*** velocity_x_tilda,
                              double*** rho_new, double*** rho,
                              double***  temperature, double Reynolds,
 			     double source,
-                             double dz, double* dy,  double dx, double dt,
+                             double dz, double* dy,  double dx,
+			     double dt, double time_total,
                              int ldx, int ldy, int ldz);
 
 void Intermediate_Velocity_Y(double*** velocity_y_tilda,
@@ -199,7 +226,8 @@ void Intermediate_Velocity_Y(double*** velocity_y_tilda,
                              double*** rho_new, double*** rho,
                              double*** temperature, double  Reynolds,
 			     double source,
-                             double dx, double* dy,  double dz, double dt,
+                             double dx, double* dy,  double dz,
+			     double dt, double time_total,
                              int ldx, int ldy, int ldz);
 
 void Intermediate_Velocity_Z(double*** velocity_z_tilda,
@@ -209,7 +237,8 @@ void Intermediate_Velocity_Z(double*** velocity_z_tilda,
                              double*** flux_x, double***flux_y, double***flux_z,
                              double*** rho_new, double*** rho,
                              double*** temperature, double Reynolds, double source,
-                             double dx, double* dy,  double dz, double dt,
+                             double dx, double* dy,  double dz, 
+			     double dt, double time_total,
                              int ldx, int ldy, int ldz);
 
 

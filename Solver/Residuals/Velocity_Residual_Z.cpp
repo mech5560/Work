@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
-*  Last Modified: Time-stamp: <2014-05-19 15:01:21 mike_georgiou>
+*  Last Modified: Time-stamp: <2014-05-23 16:29:18 mike_georgiou>
 *
 *
 Velocity_Residual_Z.cpp -- This function computes the velocity residuals in the
@@ -15,9 +15,12 @@ the Y-direction.
 
 void Velocity_Residual_Z( double*** residual_z, double*** velocity_x,
                           double*** velocity_y, double*** velocity_z,
-                          double*** flux_x, double*** flux_y, double*** flux_z,
-                          double*** temperature, double Reynolds, double source,
+                          double*** flux_x, double*** flux_y, 
+			  double*** flux_z,
+                          double*** temperature, double Reynolds, 
+			  double source,
                           double dx, double* dy, double dz,
+			  double time_total,
                           int ldx, int ldy, int ldz)
 {
 

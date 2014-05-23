@@ -9,7 +9,7 @@
 #include "Struct.h"
 
 
-
+static const double pi = 4.*atan(1.);
 
 
 int 

@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 12:02:12 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-23 09:20:58 mike_georgiou>
  *
  *
 Intermediate_Velocity_X.cpp -- This function computes the u_tilda of my
@@ -13,13 +13,18 @@ code. Firstly  the velocity residual is computed.
 #include"Intermediate_Velocity.h"
 
 void Intermediate_Velocity_X(double*** velocity_x_tilda,
-                             double*** residual_x, double*** residual_x_old,
-                             double*** velocity_x, double*** velocity_y,
+                             double*** residual_x,
+			     double*** residual_x_old,
+                             double*** velocity_x, 
+			     double*** velocity_y,
                              double*** velocity_z,
-                             double*** flux_x, double***flux_y, double***flux_z,
-                             double*** rho_new, double*** rho,double*** temperature,
+                             double*** flux_x, double***flux_y,
+			     double***flux_z,
+                             double*** rho_new, double*** rho,
+			     double*** temperature,
                              double Reynolds,double source,
-                             double dx, double* dy,  double dz, double dt,
+                             double dx, double* dy,  double dz,
+			     double dt, double time_total,
                              int ldx, int ldy, int ldz)
 {
 
@@ -30,6 +35,7 @@ void Intermediate_Velocity_X(double*** velocity_x_tilda,
                        temperature, Reynolds,
 		       source,
                        dx, dy, dz,
+		       time_total,
                        ldx, ldy, ldz);
 
 
@@ -40,10 +46,12 @@ void Intermediate_Velocity_X(double*** velocity_x_tilda,
       for (int i=0; i<ldx; i++){
 
         velocity_x_tilda[k][j][i] = 
+
 	  ((rho[k][j][i]*velocity_x[k][j][i] +
 	    dt*(1.5*residual_x[k][j][i] -
 		0.5*residual_x_old[k][j][i] ) )
 	  / rho_new[k][j][i]);
+
       }
     }
   }

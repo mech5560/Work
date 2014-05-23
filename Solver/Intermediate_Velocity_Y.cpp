@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 12:03:35 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-20 12:19:13 mike_georgiou>
  *
  *
 Intermediate_Velocity_Y.cpp -- This function computes the v_tilda of my
@@ -12,13 +12,18 @@ code. Firstly  the velocity residual is computed.
 #include"Intermediate_Velocity.h"
 
 void Intermediate_Velocity_Y(double*** velocity_y_tilda,
-                             double*** residual_y, double*** residual_y_old,
-                             double*** velocity_x, double*** velocity_y,
+                             double*** residual_y,
+			     double*** residual_y_old,
+                             double*** velocity_x, 
+			     double*** velocity_y,
                              double*** velocity_z,
-                             double*** flux_x, double***flux_y, double***flux_z,
-                             double*** rho_new, double*** rho,double*** temperature,
+                             double*** flux_x, double***flux_y, 
+			     double***flux_z,
+                             double*** rho_new, double*** rho,
+			     double*** temperature,
                              double Reynolds,double source,
-                             double dx, double* dy,  double dz, double dt,
+                             double dx, double* dy,  double dz,
+			     double dt, double time_total,
                              int ldx, int ldy, int ldz)
 {
 
@@ -27,6 +32,7 @@ void Intermediate_Velocity_Y(double*** velocity_y_tilda,
                        flux_x, flux_y,  flux_z,
                        temperature, Reynolds,source,
                        dx, dy,  dz,
+		       time_total,
                        ldx, ldy, ldz);
 
 

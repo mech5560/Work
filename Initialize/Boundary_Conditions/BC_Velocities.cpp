@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 16:34:52 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-22 16:48:59 mike_georgiou>
  *
  * BC_Velocities.cpp -- In this program I will define the
  * Boundary conditions for the three components of the velocities
@@ -25,7 +25,7 @@ void BC_Velocities(double*** velocity_x,
                    double bc_x_top, double bc_x_bottom,
                    double bc_y_top, double bc_y_bottom,
                    double bc_z_top, double bc_z_bottom,
-                   double *dy)
+                   double *dy, double dx, double time)
 {
 
   //X-Direction BC
@@ -50,8 +50,65 @@ void BC_Velocities(double*** velocity_x,
     }
   }
 
+  if (index==1) //Dirichlet
+    {
+
+      for (int k = 0; k < ldz; k++){
+
+	double x=0.;
+        for (int i = 0; i< ldx; i++){
+        
+	  velocity_x[k][-ly][i] = 2.*bc_x_bottom - velocity_x[k][0][i];
+          velocity_x[k][ldy][i] = 2.*bc_x_top - velocity_x[k][ldy-1][i];
+	  // x+=dx/2.;
+	  // double pi = 4.*atan(1.);
+	  // velocity_x[k][j][i]=cos(2.*pi*x);
+	  // x+=dx/2.;
+
+
+          velocity_y[k][-ly][i] = 2.*bc_y_bottom - velocity_y[k][0][i];
+          velocity_y[k][ldy][i] = 2.*bc_y_top - velocity_y[k][ldy-1][i];
+
+          velocity_z[k][-ly][i] = 2.*bc_z_bottom - velocity_z[k][0][i];
+          velocity_z[k][ldy][i] = 2.*bc_z_top - velocity_z[k][ldy-1][i];
+
+        }
+      }
+
+      for (int k = 0; k < ldz; k++){
+
+        for (int i=1; i<=lx; i++)
+          {
+            /*******Left-Periodic-BC************/
+            velocity_x[k][ldy][-i] =  velocity_x[k][ldy][ldx-i];
+            velocity_y[k][ldy][-i] =  velocity_y[k][ldy][ldx-i];
+            velocity_z[k][ldy][-i] =  velocity_z[k][ldy][ldx-i];
+
+            velocity_x[k][-ly][-i] =  velocity_x[k][-ly][ldx-i];
+            velocity_y[k][-ly][-i] =  velocity_y[k][-ly][ldx-i];
+            velocity_z[k][-ly][-i] =  velocity_z[k][-ly][ldx-i];
+
+          }
+        for (int i=0; i<rx; i++)
+          {
+            /*******Right-Periodic-BC***********/
+            velocity_x[k][ldy][ldx+i] =  velocity_x[k][ldy][i];
+            velocity_y[k][ldy][ldx+i] =  velocity_y[k][ldy][i];
+            velocity_z[k][ldy][ldx+i] =  velocity_z[k][ldy][i];
+
+
+            velocity_x[k][-ly][ldx+i] =  velocity_x[k][-ly][i];
+            velocity_y[k][-ly][ldx+i] =  velocity_y[k][-ly][i];
+            velocity_z[k][-ly][ldx+i] =  velocity_z[k][-ly][i];
+
+          }
+      }
+
+    }
+
+
   // Z-Direction BC
-  for (int j = 0; j < ldy; j++){
+  for (int j = -ly; j < ldy+ry; j++){
     for (int i = -lx; i< ldx+rx; i++){
 
       for (int k=1; k<=lz; k++)
@@ -73,44 +130,6 @@ void BC_Velocities(double*** velocity_x,
   }
 
 
-  if (index==0) // Neuman BC = BC_Bottom
-    {
-      //Wall BC
-      for (int k = -lz; k < ldz+rz; k++){
-        for (int i = -lx; i< ldx+rx; i++){
-
-          velocity_x[k][-ly][i] = bc_x_bottom*2.*dy[0] + velocity_x[k][0][i];
-          velocity_x[k][ldy][i] = -bc_x_top*dy[ldy-1]*2. + velocity_x[k][ldy-1][i];
 
 
-          velocity_y[k][-ly][i] = bc_y_bottom*2.*dy[0] + velocity_y[k][0][i];
-          velocity_y[k][ldy][i] = -bc_y_top*dy[ldy-1]*2. + velocity_y[k][ldy-1][i];
-
-          velocity_z[k][-ly][i] = bc_z_bottom*2.*dy[0] + velocity_z[k][0][i];
-          velocity_z[k][ldy][i] = -bc_z_top*dy[ldy-1]*2. + velocity_z[k][ldy-1][i];
-
-
-        }
-      }
-    }
-
-  if (index==1) // Dirichlet BC = BC_Bottom
-    {
-
-      for (int k = -lz; k < ldz+rz; k++){
-        for (int i = -lx; i< ldx+rx; i++)
-          {
-
-            velocity_x[k][-ly][i] = 2.*bc_x_bottom - velocity_x[k][0][i];
-            velocity_x[k][ldy][i] = 2.*bc_x_top - velocity_x[k][ldy-1][i];
-
-            velocity_y[k][-ly][i] = 2.*bc_y_bottom - velocity_y[k][0][i];
-            velocity_y[k][ldy][i] = 2.*bc_y_top - velocity_y[k][ldy-1][i];
-
-            velocity_z[k][-ly][i] = 2.*bc_z_bottom - velocity_z[k][0][i];
-            velocity_z[k][ldy][i] = 2.*bc_z_top - velocity_z[k][ldy-1][i];
-
-          }
-      }
-    }
 }

@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-16 14:39:58 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-20 14:23:24 mike_georgiou>
  *
  *
 Print_2D_Data.cpp -- This program prints writes two columns of data that are
@@ -35,7 +35,7 @@ void Print_2D_Curve(double*** data, double* dy,
 
   outfile<<"#  X     Y"<<endl;
   // for (int k=0; k<ldz; k++){
-  double y_coord=-1.;
+  double y_coord=0.;
   for (int j=0; j<ldy; j++)
     {
     y_coord+=dy[j];

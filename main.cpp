@@ -1,13 +1,13 @@
 /*******************************************
  *   Author: Michail Georgiou
  * main.cpp -- This project solves the 3D navier stokes equations for a
-non-isothermal problem. Fourth order accurate conservative schemes are used in
-the spanwise(x) and streamwise(z) directions. These schemes are being adopted by
-the Lessani-Papalexandris paper. On the vertical direction(y) a non-uniform grid
-is used.
-*
-* Written on Wednesday, 30 April 2014.
-********************************************/
+ non-isothermal problem. Fourth order accurate conservative schemes are used in
+ the spanwise(x) and streamwise(z) directions. These schemes are being adopted by
+ the Lessani-Papalexandris paper. On the vertical direction(y) a non-uniform grid
+ is used.
+ *
+ * Written on Wednesday, 30 April 2014.
+ ********************************************/
 
 //Definition of the libraries that this program will use
 #include "main.h"
@@ -20,14 +20,14 @@ int main (int argc, char *argv[])
 {
 
   //Defining the number of solution points in each direction
-  length_x = 4.; length_y =2.; length_z=2.;
-  ldx=62; ldy=31; ldz=31;
+  length_x = 1.; length_y =1.; length_z=1.;
+  ldx=64; ldy=64; ldz=64;
 
   //Calculating dx and dz
   dx= length_x/(ldx*1.0);
   dz= length_z/(ldz*1.0);
 
-  dt= cfl*dz;
+  dt= cfl*dx;
 
   //Defining the Non-Zero Elements for the Poisson solver
   nze = 15*ldz*(ldy-2)*ldx + 14*ldz*ldx*2;
@@ -42,8 +42,8 @@ int main (int argc, char *argv[])
 
   Allocator(ldx,ldy,ldz,
             left_x,right_x,
-            left_y,right_y, 
-	    left_z,right_z,
+            left_y,right_y,
+            left_z,right_z,
             &Arr);
 
 
@@ -56,9 +56,9 @@ int main (int argc, char *argv[])
 
   //Calculation of the Dy's
   Cubic_Mesh(Arr.dy, Arr.y,
-	     length_y,
-	     ldy,
-	     left_y,right_y);
+             length_y,
+             ldy,
+             left_y,right_y);
 
 
   // Defining the Second derivative coefficients  that will be use by the
@@ -78,33 +78,49 @@ int main (int argc, char *argv[])
   //////////////////Initial Conditions/////////////////////////
   /////////////////////////////////////////////////////////////
 
-  ////Initializing the Velocities
-  // Initial_Reader( Arr.velocity_x,  Arr.velocity_y,
-  // 		  Arr.velocity_z,
-  // 		  ldx,  ldy,  ldz);
 
-  // Pertubation_Introducer( Arr.velocity_x,  Arr.velocity_y,
-  // 			  Arr.velocity_z,
-  // 			  length_x,  length_y,
-  // 			  length_z,
-  // 			  dx,  Arr.y,  dz,
-  // 			  ldx,  ldy,  ldz);
+  Initial_Brown_2( Arr.velocity_x,  Arr.velocity_y,
+  		   Arr.velocity_z,
+  		   dx, Arr.dy,
+  		   ldx,  ldy,  ldz);
 
-  // Print_2D_Matrix(Arr.velocity_x, ldz,ldy,ldx,0,"X0");
-  // Print_2D_Matrix(Arr.velocity_y, ldz,ldy,ldx,0,"Y0");
 
-  BC_Velocities( Arr.velocity_x,
-  		 Arr.velocity_y,
-  		 Arr.velocity_z,
-  		 ldx, ldy, ldz,
-  		 left_x, right_x,
-  		 left_y, right_y,
-  		 left_z, right_z,
-  		 1,
-  		 velocity_x_top, velocity_x_bottom,
-  		 velocity_y_top, velocity_y_bottom,
-  		 velocity_z_top, velocity_z_bottom,
-  		 Arr.dy);
+  // Initial_Christos( Arr.velocity_x,  Arr.velocity_y,
+  // 		    Arr.velocity_z,
+  // 		    dx,
+  // 		    ldx,  ldy,  ldz);
+
+  BC_Velocities( Arr.velocity_x, 
+                 Arr.velocity_y,
+                 Arr.velocity_z,
+                 ldx, ldy, ldz,
+                 left_x, right_x,
+                 left_y, right_y,
+                 left_z, right_z,
+                 1,
+                 velocity_x_top, velocity_x_bottom,
+                 velocity_y_top, velocity_y_bottom,
+                 velocity_z_top, velocity_z_bottom,
+                 Arr.dy, dx, 0.);
+
+
+  Print_2D_Matrix_Ghost(Arr.velocity_x, ldx,ldy,ldz,
+			left_x, right_x,
+			left_y, right_y,
+			left_z, right_z,
+			0,"Xinit");
+  
+  Print_2D_Matrix_Ghost(Arr.velocity_y, ldx,ldy,ldz,
+			left_x, right_x,
+			left_y, right_y,
+			left_z, right_z,
+			0,"Yinit");
+
+  Print_2D_Matrix_Ghost(Arr.velocity_z, ldx,ldy,ldz,
+			left_x, right_x,
+			left_y, right_y,
+			left_z, right_z,
+			0,"Zinit");
 
   //Initializing the Arr.temperature
   Initial_One(Arr.temperature,
@@ -112,8 +128,27 @@ int main (int argc, char *argv[])
               left_x,right_x,
               left_y,right_y,
               left_z,right_z);
-  
+
   BC_Single(Arr.temperature,
+            ldx, ldy, ldz,
+            left_x,right_x,
+            left_y,right_y,
+            left_z,right_z,
+            1,
+            temperature_top, temperature_bottom,
+            Arr.dy);
+
+  //////////////////////////////////////////////////////
+  /////////////////////////////////////////////////////
+
+  //Only for the test case, this thing will be applied
+  Initial_One(Arr.temperature_new,
+              ldx, ldy, ldz,
+              left_x,right_x,
+              left_y,right_y,
+              left_z,right_z);
+
+  BC_Single(Arr.temperature_new,
             ldx, ldy, ldz,
             left_x,right_x,
             left_y,right_y,
@@ -136,7 +171,6 @@ int main (int argc, char *argv[])
             rho_gradient_top, rho_gradient_bottom,
             Arr.dy);
 
-
   Density_Calculator(Arr.rho,
                      Arr.temperature,
                      ldx, ldy, ldz);
@@ -144,7 +178,24 @@ int main (int argc, char *argv[])
             ldx, ldy, ldz,
             left_x,right_x,
             left_y,right_y,
-	    left_z,right_z,
+            left_z,right_z,
+            0,
+            rho_gradient_top, rho_gradient_bottom,
+            Arr.dy);
+
+
+
+  //Only for the test case will thing will be applied
+  //////////////////////////////////////////////////
+  /////////////////////////////////////////////////
+  Density_Calculator(Arr.rho_new,
+                     Arr.temperature,
+                     ldx, ldy, ldz);
+  BC_Single(Arr.rho_new,
+            ldx, ldy, ldz,
+            left_x,right_x,
+            left_y,right_y,
+            left_z,right_z,
             0,
             rho_gradient_top, rho_gradient_bottom,
             Arr.dy);
@@ -153,7 +204,6 @@ int main (int argc, char *argv[])
   //Initializing the Arr.Fluxes.
   //In order to do that I will use the Arr.Flux_Evaluation function.
   //But with the initial values as an input
-
   Flux_Evaluation_X(Arr.flux_x, Arr.velocity_x,
                     Arr.rho_old, Arr.pressure,
                     dx, dt,
@@ -169,24 +219,18 @@ int main (int argc, char *argv[])
                     dz, dt,
                     ldx,  ldy,  ldz+1);
 
-  // //Assigning the BC for the Fluxes and the Intermediate Velocities
-  // BC_Flux(Arr.flux_x, Arr.flux_y, Arr.flux_z,
-  //         Arr.velocity_x_tilda, Arr.velocity_y_tilda, Arr.velocity_z_tilda,
-  //         ldx, ldy, ldz,
-  //         left_x, right_x,
-  //         left_y, right_y,
-  //         left_z, right_z);
-
-
   //initializing the Arr.Residuals at the n-1 time
   //In order to do that I will use the Velosity Residual Functions.
   //but with the initial values velocities as an input
+
+  double time_total =0.;
   Velocity_Residual_X( Arr.residual_x_old,
                        Arr.velocity_x, Arr.velocity_y,Arr.velocity_z,
                        Arr.flux_x,Arr.flux_y,  Arr.flux_z,
                        Arr.temperature, Reynolds,
-		       Pressure_Gradient,
+                       Pressure_Gradient,
                        dx, Arr.dy,  dz,
+                       time_total,
                        ldx,  ldy,  ldz);
 
 
@@ -194,17 +238,25 @@ int main (int argc, char *argv[])
                        Arr.velocity_x,  Arr.velocity_y, Arr.velocity_z,
                        Arr.flux_x, Arr.flux_y,  Arr.flux_z,
                        Arr.temperature, Reynolds,
-		       0.,
+                       0.,
                        dx, Arr.dy,  dz,
+                       time_total,
                        ldx,  ldy,  ldz);
 
   Velocity_Residual_Z( Arr.residual_z_old,
                        Arr.velocity_x,  Arr.velocity_y, Arr.velocity_z,
                        Arr.flux_x, Arr.flux_y,  Arr.flux_z,
-                       Arr.temperature, Reynolds, 
-		       0.,
+                       Arr.temperature, Reynolds,
+                       0.,
                        dx, Arr.dy, dz,
+                       time_total,
                        ldx,  ldy, ldz);
+
+  Print_2D_Matrix(Arr.residual_x_old, ldx,ldy,ldz,0,"rxold");
+  Print_2D_Matrix(Arr.residual_y_old, ldx,ldy,ldz,0,"ryold");
+  Print_2D_Matrix(Arr.residual_z_old, ldx,ldy,ldz,0,"rzold");
+
+
 
   // Before Entering the time integration loop
   // i will define the constant vectors for the poisson solver
@@ -215,41 +267,42 @@ int main (int argc, char *argv[])
   //////////////////////////////////////////////////////////////////////
   //////////////////////Time Integration Loop///////////////////////////
   //////////////////////////////////////////////////////////////////////
+
   for (int time_index=0; time_index<4e5; time_index++ )
     {
-
+      time_total += dt;
       //////////////////////////////////////////////////////////////////////
       ///////////////////////////// Predictor Stage ////////////////////////
       //////////////////////////////////////////////////////////////////////
 
-      //Calculating the Arr.temperature at the Predictor stage
-      Energy_Equation(Arr.temperature_new, Arr.temperature,
-                      Arr.velocity_x, Arr.velocity_y, Arr.velocity_z,
-                      Arr.rho, Reynolds, Prandtl,
-                      dx, Arr.dy, dz, dt,
-                      ldx, ldy, ldz);
+      // ////Calculating the Arr.temperature at the Predictor stage
+      // Energy_Equation(Arr.temperature_new, Arr.temperature,
+      //                 Arr.velocity_x, Arr.velocity_y, Arr.velocity_z,
+      //                 Arr.rho, Reynolds, Prandtl,
+      //                 dx, Arr.dy, dz, dt,
+      //                 ldx, ldy, ldz);
 
-      BC_Single(Arr.temperature_new,
-                ldx, ldy, ldz,
-                left_x,right_x,
-                left_y,right_y,
-                left_z,right_z,
-                1,
-                temperature_top, temperature_bottom,
-                Arr.dy);
+      // BC_Single(Arr.temperature_new,
+      //           ldx, ldy, ldz,
+      //           left_x,right_x,
+      //           left_y,right_y,
+      //           left_z,right_z,
+      //           1,
+      //           temperature_top, temperature_bottom,
+      //           Arr.dy);
 
 
-      /*Computing Arr.rho_Star*/
-      Density_Calculator(Arr.rho_new, Arr.temperature_new, ldx, ldy, ldz);
+      // /*Computing Arr.rho_Star*/
+      // Density_Calculator(Arr.rho_new, Arr.temperature_new, ldx, ldy, ldz);
 
-      BC_Single(Arr.rho_new,
-                ldx,ldy,ldz,
-                left_x,right_x,
-                left_y,right_y,
-                left_z,right_z,
-                0,
-                rho_gradient_top, rho_gradient_bottom,
-                Arr.dy);
+      // BC_Single(Arr.rho_new,
+      //           ldx,ldy,ldz,
+      //           left_x,right_x,
+      //           left_y,right_y,
+      //           left_z,right_z,
+      //           0,
+      //           rho_gradient_top, rho_gradient_bottom,
+      //           Arr.dy);
 
 
       /*Calculating the Intermediate Velocity at the Predictor stage*/
@@ -259,8 +312,9 @@ int main (int argc, char *argv[])
                               Arr.flux_x, Arr.flux_y, Arr.flux_z,
                               Arr.rho_new, Arr.rho, Arr.temperature_new,
                               Reynolds,
-			      Pressure_Gradient,
+                              Pressure_Gradient,
                               dx, Arr.dy, dz, dt,
+                              time_total,
                               ldx,  ldy,  ldz);
 
       Intermediate_Velocity_Y(Arr.velocity_y_tilda,
@@ -268,8 +322,10 @@ int main (int argc, char *argv[])
                               Arr.velocity_x, Arr.velocity_y, Arr.velocity_z,
                               Arr.flux_x, Arr.flux_y, Arr.flux_z,
                               Arr.rho_new, Arr.rho, Arr.temperature_new,
-                              Reynolds, 0.,
+                              Reynolds,
+                              0.,
                               dx, Arr.dy, dz, dt,
+                              time_total,
                               ldx,  ldy,  ldz);
 
       Intermediate_Velocity_Z(Arr.velocity_z_tilda,
@@ -277,18 +333,46 @@ int main (int argc, char *argv[])
                               Arr.velocity_x, Arr.velocity_y, Arr.velocity_z,
                               Arr.flux_x, Arr.flux_y, Arr.flux_z,
                               Arr.rho_new, Arr.rho, Arr.temperature_new,
-                              Reynolds, 
-			      0.,
+                              Reynolds,
+                              0.,
                               dx, Arr.dy, dz, dt,
+                              time_total,
                               ldx,  ldy,  ldz);
 
+      BC_Tilda(Arr.velocity_x_tilda,
+               Arr.velocity_y_tilda,
+               Arr.velocity_z_tilda,
+               ldx, ldy, ldz,
+               left_x, right_x,
+               left_y, right_y,
+               left_z, right_z);
 
-      BC_Flux(Arr.flux_x, Arr.flux_y, Arr.flux_z,
-              Arr.velocity_x_tilda, Arr.velocity_y_tilda, Arr.velocity_z_tilda,
-              ldx, ldy, ldz,
-              left_x, right_x,
-              left_y, right_y,
-              left_z, right_z);
+
+      Print_2D_Matrix_Ghost(Arr.velocity_x_tilda, ldx,ldy,ldz,
+			    left_x,right_x,
+			    0,0,
+			    0,0,
+			    time_index,"tildax");
+      Print_2D_Matrix_Ghost(Arr.velocity_y_tilda,
+			    ldx,ldy,ldz,
+			    0,0,
+			    left_y,right_y,
+			    0,0,
+			    time_index,"tilday");
+
+
+      Print_2D_Matrix_Ghost(Arr.velocity_z_tilda, 
+			    ldx,ldy,ldz,
+			    0,0,
+			    0,0,
+			    left_z,right_z,
+			    time_index,"tildaz");
+
+
+      Print_2D_Matrix(Arr.residual_x, ldx,ldy,ldz,time_index,"resx");
+      Print_2D_Matrix(Arr.residual_y, ldx,ldy,ldz,time_index,"resy");
+      Print_2D_Matrix(Arr.residual_z, ldx,ldy,ldz,time_index,"resz");
+
 
 
       /*Solving the Poisson Equation
@@ -305,9 +389,14 @@ int main (int argc, char *argv[])
                               dt,
                               ldx, ldy,  ldz);
 
+      //Introducing as a  prediction the exact solution
+      Print_1D_Matrix(rhs,
+		  ldx,  ldy,  ldz,
+		  time_index, "rhs");
+
       /*solving the Poisson Equation*/
-      BCSG(s_a, ij_a, result, rhs, precond_a,
-	   1e-10, 3000, dim_a, flag);
+      BCSG_Printing(s_a, ij_a, result, rhs, precond_a,
+                    1e-15, 1000, dim_a, flag);
       if(flag==1)
         {
           cout<<time_index<<endl;
@@ -332,8 +421,7 @@ int main (int argc, char *argv[])
                 pressure_gradient_top, pressure_gradient_bottom,
                 Arr.dy);
 
-      //Print_2D_Matrix(Arr.pressure,ldz,ldy,ldx,time_index,"prep");
-      
+
       /*computing the Updated Velocity*/
       Velocity_Update_X(Arr.velocity_x_new, Arr.velocity_x_tilda,
                         Arr.rho_new, Arr.pressure,
@@ -350,20 +438,19 @@ int main (int argc, char *argv[])
                         dz, dt,
                         ldx,  ldy,  ldz);
 
-      
-      BC_Velocities( Arr.velocity_x_new,
-		     Arr.velocity_y_new,
-		     Arr.velocity_z_new,
-		     ldx, ldy, ldz,
-		     left_x, right_x,
-		     left_y, right_y,
-		     left_z, right_z,
-		     1,
-		     velocity_x_top, velocity_x_bottom,
-		     velocity_y_top, velocity_y_bottom,
-		     velocity_z_top, velocity_z_bottom,
-		     Arr.dy);
 
+      BC_Velocities( Arr.velocity_x_new,
+                     Arr.velocity_y_new,
+                     Arr.velocity_z_new,
+                     ldx, ldy, ldz,
+                     left_x, right_x,
+                     left_y, right_y,
+                     left_z, right_z,
+                     1,
+                     velocity_x_top, velocity_x_bottom,
+                     velocity_y_top, velocity_y_bottom,
+                     velocity_z_top, velocity_z_bottom,
+                     Arr.dy, dx, time_total);
 
 
       /*Updating the Auxiliary Arr.Fluxes in order to proceed at
@@ -396,9 +483,9 @@ int main (int argc, char *argv[])
       // /////////////////////////////////////////////////////////////
 
 
-      // //Calculating the Arr.temperature_Av which is necessary for the
-      // // calculation of the temperature 
-      // // at the corrector stage
+      // ////Calculating the Arr.temperature_Av which is necessary for the
+      // //// calculation of the temperature
+      // //// at the corrector stage
       // for (int k=0; k<ldz; k++){
       //   for (int j =0; j<ldy; j++){
       //     for (int i=0; i<ldx; i++){
@@ -449,15 +536,16 @@ int main (int argc, char *argv[])
 
       // /*Determining the RHS of the Poisson Equation*/
       // Right_Hand_Side_Poisson(rhs,Arr.velocity_x_tilda,
-      //                         Arr.velocity_y_tilda, Arr.velocity_z_tilda,
+      //                         Arr.velocity_y_tilda,
+      //                         Arr.velocity_z_tilda,
       //                         Arr.rho_new,Arr.rho, Arr.rho_old,
       //                         dx, Arr.dy, dz,
       //                         dt,
       //                         ldx,  ldy,  ldz);
 
       // /*Solving the Poisson Equation*/
-      // BCSG(s_a, ij_a, result, rhs, precond_a,
-      // 		    1e-10,3000,dim_a,flag);
+      // BCSG_Printing(s_a, ij_a, result, rhs, precond_a,
+      //               1e-15,1000,dim_a,flag);
       // if(flag==1)
       //   {
       //     cout<<time_index<<endl;
@@ -484,9 +572,6 @@ int main (int argc, char *argv[])
       //           pressure_gradient_top, pressure_gradient_bottom,
       //           Arr.dy);
 
-      // Print_2D_Matrix(Arr.pressure,ldz,ldy,ldx,time_index,"prec");
-
-
       // /*computing the Updated Velocity*/
       // Velocity_Update_X(Arr.velocity_x_new, Arr.velocity_x_tilda,
       //                   Arr.rho_new, Arr.pressure,
@@ -503,34 +588,22 @@ int main (int argc, char *argv[])
       //                   Arr.rho_new, Arr.pressure,
       //                   dz, dt,
       //                   ldx,  ldy,  ldz);
+
       // /*Implementing the Velocity  boundary conditions for the next step*/
+      // BC_Velocities( Arr.velocity_x_new,
+      //                Arr.velocity_y_new,
+      //                Arr.velocity_z_new,
+      //                ldx, ldy, ldz,
+      //                left_x, right_x,
+      //                left_y, right_y,
+      //                left_z, right_z,
+      //                1,
+      //                velocity_x_top, velocity_x_bottom,
+      //                velocity_y_top, velocity_y_bottom,
+      //                velocity_z_top, velocity_z_bottom,
+      //                Arr.dy, dx, time_total);
 
-      // BC_Single(Arr.velocity_x_new,
-      //           ldx, ldy, ldz,
-      //           left_x,right_x,
-      //           left_y,right_y,
-      //           left_z,right_z,
-      //           1,
-      //           velocity_top, velocity_bottom,
-      //           Arr.dy);
 
-      // BC_Single(Arr.velocity_y_new,
-      //           ldx, ldy, ldz,
-      //           left_x,right_x,
-      //           left_y,right_y,
-      //           left_z,right_z,
-      //           1,
-      //           velocity_top, velocity_bottom,
-      //           Arr.dy);
-
-      // BC_Single(Arr.velocity_z_new,
-      //           ldx, ldy, ldz,
-      //           left_x,right_x,
-      //           left_y,right_y,
-      //           left_z,right_z,
-      //           1,
-      //           velocity_top, velocity_bottom,
-      //           Arr.dy);
 
 
       // /*Updating the Auxiliary Arr.Fluxes in order to proceed at
@@ -558,23 +631,34 @@ int main (int argc, char *argv[])
 
 
 
-      if (time_index%1000==0)
+      if (time_index%1==0)
         {
-          Print_2D_Matrix(Arr.velocity_x_new,ldz,ldy,ldx,
-			  time_index,"X"); 
+          Print_2D_Matrix_Ghost(Arr.velocity_x_new,ldx,ldy,ldz,
+				left_x,right_x,
+				left_y,right_y,
+				left_z,right_z,
+				time_index,"X");
 
-          Print_2D_Matrix(Arr.velocity_y_new,ldz,ldy,ldx,
-			  time_index,"Y");
+          Print_2D_Matrix_Ghost(Arr.velocity_y_new,ldx,ldy,ldz,
+				left_x,right_x,
+				left_y,right_y,
+				left_z,right_z,
+				time_index,"Y");
 
-          Print_2D_Matrix(Arr.velocity_z_new,ldz,ldy,ldx,
-			  time_index,"Z"); 
+          Print_2D_Matrix_Ghost(Arr.velocity_z_new,ldx,ldy,ldz,
+				left_x,right_x,
+				left_y,right_y,
+				left_z,right_z,
+				time_index,"Z");
 
-          Print_2D_Matrix(Arr.pressure,ldz,ldy,ldx,time_index,"P");
+          Print_2D_Matrix_Ghost(Arr.pressure,ldx,ldy,ldz,
+				left_x,right_x,
+				left_y,right_y,
+				left_z,right_z,
+				time_index,"P"); 
 
-          Print_2D_Curve(Arr.velocity_x_new,
-			 Arr.dy,ldz,ldy,ldx,time_index,"2d"); 
           cout<<time_index<<endl;
-
+          getchar();
         }
 
       Next_Step(&Arr);

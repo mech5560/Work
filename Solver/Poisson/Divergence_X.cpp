@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-04-25 15:50:59 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-23 15:52:12 mike_georgiou>
  *
  *
 Divergence_X.cpp -- This program computes the X-component of the divergence
@@ -13,7 +13,7 @@ that is used in the Right_Hand_Side_Poisson.cpp program
 double Divergence_X(double*** velocity_x, double dx,
                     int i, int j, int k)
 {
-	double derivative_x[4][2], interpolated_x[4];
+  double derivative_x[4][2], interpolated_x[4];
 
 
   //calculation of the interpolated quantities that will be used for the
@@ -28,7 +28,7 @@ double Divergence_X(double*** velocity_x, double dx,
       //\delta_3
       //i\pm 3
       derivative_x[1][vi]=-1./8.*Derivative(velocity_x[k][j][i+vj],
-                                            velocity_x[k][j][i+vj],
+                                            velocity_x[k][j][i+vj-3],
                                             dx,3);
 
       //i\pm 1
@@ -52,7 +52,7 @@ double Divergence_X(double*** velocity_x, double dx,
     }
 
   //summing the total derivative
-	double  total_derivative=0.;
+  double  total_derivative=0.;
   for (int vi=0; vi<4; vi++)
     total_derivative +=interpolated_x[vi];
 

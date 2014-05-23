@@ -29,6 +29,9 @@ double Viscous_Component_XZ(double*** velocity_x, double*** velocity_z,
                             double dx, double dz,
                             int i, int j, int k);
 
+double Forcing_Term_Christos_X(double x_local, double y_local,
+                               double time);
+
 //Y-momentum
 double Viscous_Component_YX(double*** velocity_x, double*** velocity_y,
                             double*** temperature, double Reynolds,
@@ -46,6 +49,9 @@ double Viscous_Component_YZ(double*** velocity_y, double*** velocity_z,
                             double*** temperature, double Reynolds,
                             double* dy, double dz,
                             int i, int j, int k);
+
+double Forcing_Term_Christos_Y(double x_local, double y_local,
+                               double time);
 
 
 //Z-momentum
@@ -65,5 +71,9 @@ double Viscous_Component_ZZ(double*** velocity_x, double*** velocity_y,
                             double*** temperature, double Reynolds,
                             double dx, double* dy, double dz,
                             int i, int j, int k);
+
+
+
+
 
 #endif

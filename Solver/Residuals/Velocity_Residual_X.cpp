@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 15:01:15 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-23 16:03:21 mike_georgiou>
  *
  *
 Velocity_Residual_X.cpp -- This function computes the velocity
@@ -10,6 +10,7 @@ direction (X and Z) and second order accuracy for  the Y-direction.
 *
 * Written on Thursday, 17 April 2014.
 ********************************************/
+
 #include"Residuals.h"
 #include"Residuals-inl.h"
 
@@ -20,28 +21,33 @@ void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
                           double*** temperature, double Reynolds,
 			  double source,
                           double dx, double* dy, double dz,
+			  double time_total,
                           int ldx, int ldy, int ldz)
 {
 
   //Variable for the calculation of the convective terms
-  double  convection;
-
+  double  convection=0;
   //Variables for the calculation of the viscous terms
   double viscous_components[3],  viscous_total;
 
-
-
   for (int k=0; k<ldz; k++){
+
+    double y_local =0.;
     for (int j=0; j<ldy; j++){
+      
+      y_local +=dy[j];
+      double x_local=0.;
+
       for (int i=0; i<ldx; i++){
-
-        //Computing the convection term of the residuals by calling the
-
+	x_local += dx/2.;
+        
+	//Computing the convection term of the residuals by calling the
         //Convection Term
         convection= Convection_Term(velocity_x,
                                     flux_x, flux_y,flux_z,
                                     dx, dy, dz,
                                     i, j, k);
+
 
         //Viscous Term XX
         viscous_components[0] = 
@@ -67,14 +73,21 @@ void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
 			       i, j, k);
 
 
+	double force = 0.;
+	//   Forcing_Term_Christos_X(x_local, y_local, time_total);
+
+	// x_local+=dx/2.;
 
 	viscous_total=0.;
         for(int index=0; index<3; index++)
           viscous_total += viscous_components[index];
 
-        residual_x[k][j][i] = -convection + viscous_total + source;
+
+
+        residual_x[k][j][i] = -convection + viscous_total + source + force;
 
       }
+      y_local +=dy[j];
     }
   }
 

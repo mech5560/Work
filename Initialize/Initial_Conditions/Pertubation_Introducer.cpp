@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 15:57:44 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-20 09:35:48 mike_georgiou>
  *
  *
 Pertubation_Introducer.cpp -- This program introduces pertubations to my
@@ -44,8 +44,8 @@ void Pertubation_Introducer(double*** velocity_x, double*** velocity_y,
 	 x_local+=dx/2.;
 	 
 
-	 velocity_y[k][j][i]  = epsilon * exp(-4*y[j]*y[j])
-	   *sin(2.*pi*y_local);
+	 velocity_y[k][j][i]  = epsilon * exp(-4*y[j]*y[j]);
+	   // *sin(2.*pi*y_local);
 
 
 

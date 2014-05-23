@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 13:25:06 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-23 09:58:12 mike_georgiou>
  *
  *
 Intermediate_Velocity_Z.cpp -- This function computes the w_tilda of my
@@ -19,7 +19,8 @@ void Intermediate_Velocity_Z(double*** velocity_z_tilda,
                              double*** flux_x, double***flux_y, double***flux_z,
                              double*** rho_new, double*** rho,double*** temperature,
                              double Reynolds, double source_term,
-                             double dx, double* dy,  double dz, double dt,
+                             double dx, double* dy,  double dz,
+			     double dt, double time_total,
                              int ldx, int ldy, int ldz)
 
 {
@@ -30,6 +31,7 @@ void Intermediate_Velocity_Z(double*** velocity_z_tilda,
                        flux_x, flux_y,  flux_z,
                        temperature, Reynolds, source_term,
                        dx, dy, dz,
+		       time_total,
                        ldx, ldy, ldz);
 
   // After the calculation of the Velocity_Residual I will compute the
@@ -41,9 +43,11 @@ void Intermediate_Velocity_Z(double*** velocity_z_tilda,
       for (int i=0; i<ldx; i++){
 
 
-        velocity_z_tilda[k][j][i] = (rho[k][j][i]*velocity_z[k][j][i] +
-                                     dt*(1.5*residual_z[k][j][i] -
-                                         0.5*residual_z_old[k][j][i]) )
+        velocity_z_tilda[k][j][i] = 
+
+	  (rho[k][j][i]*velocity_z[k][j][i] 
+	   +dt*(1.5*residual_z[k][j][i] 
+		-0.5*residual_z_old[k][j][i]) )
           /rho_new[k][j][i];
 
       }

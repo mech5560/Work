@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-16 14:43:57 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-23 09:24:52 mike_georgiou> */
 #include <iostream>
 #include <stdio.h>
 #include <fstream>
@@ -8,8 +8,8 @@
 using namespace std;
 
 void Print_2D_Matrix(double ***A,
-                   int ldz, int ldy, int ldx,
-                   int time_index, char *mike)
+		     int ldx, int ldy, int ldz,
+		     int time_index, char *mike)
 {
   stringstream ss;
   string out = "";

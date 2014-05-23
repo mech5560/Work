@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 17:32:31 mike_georgiou>
+ * Last Modified: Time-stamp: <2014-05-22 15:47:10 mike_georgiou>
  *
  * BC_Single.cpp -- In this program I will define the
  * Boundary conditions for the Density and the Pressure.
@@ -34,12 +34,12 @@ void BC_Single(double ***data,
       for (int i=1; i<=lx; i++)
         {
           /*******Left-Periodic-BC************/
-          data[k][j][-i] =  data[k][j][ldx-i];
+          data[k][j][-i] = data[k][j][ldx-i];
         }
       for (int i=0; i<rx; i++)
         {
           /*******Right-Periodic-BC***********/
-          data[k][j][ldx+i] =  data[k][j][i];
+          data[k][j][ldx+i] = data[k][j][i];
         }
 
     }
@@ -52,13 +52,13 @@ void BC_Single(double ***data,
       for (int k=1; k<=lz; k++)
         {
           //Back BC Periodic
-          data[-k][j][i] =  data[ldz-k][j][i];
+          data[-k][j][i] = data[ldz-k][j][i];
         }
 
       for (int k=0; k<rz; k++)
         {
           //Front BC Periodic
-          data[ldz+k][j][i] =  data[k][j][i];
+          data[ldz+k][j][i] = data[k][j][i];
         }
     }
   }

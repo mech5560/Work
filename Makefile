@@ -1,7 +1,7 @@
 CC  := g++
 LINKER     := $(CC)	      
 
-CFLAGS     := -std=c++0x -g3 -ggdb3 -Wall  -O3  -march=native  -fdevirtualize -fexpensive-optimizations \
+CFLAGS     := -std=c++0x -g3 -ggdb3 -Wall  -O3  -march=native  # -fdevirtualize -fexpensive-optimizations \
           -fthread-jumps  -falign-functions  -falign-jumps -fdelete-null-pointer-checks -ftree-vrp\
           -falign-loops  -falign-labels -fcaller-saves -fcrossjumping -fgcse -ftree-slp-vectorize\
 	  -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -fvect-cost-model\
@@ -37,14 +37,17 @@ UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
 	 ./Solver/Velocity_Update_Y.o ./Solver/Velocity_Update_Z.o ./Solver/Flux_Evaluation_Y.o\
 	 ./Solver/Flux_Evaluation_X.o ./Solver/Flux_Evaluation_Z.o\
 	 ./Initialize/Initial_Conditions/Initial_One.o\
+	 ./Initialize/Initial_Conditions/Initial_Christos.o\
+	 ./Initialize/Initial_Conditions/Initial_Brown_2.o\
 	 ./Initialize/Boundary_Conditions/BC_Velocities.o\
-	 ./Initialize/Print_2D_Matrix.o\
+	 ./Initialize/Print_2D_Matrix.o ./Initialize/Print_1D_Matrix.o\
+	 ./Initialize/Print_2D_Matrix_Ghost.o\
 	 ./Initialize/Alloc_Mem/Allocator.o\
 	 ./Initialize/Alloc_Mem/DeAllocator.o\
-	 ./Initialize/Boundary_Conditions/BC_Flux.o ./Initialize/Print_2D_Curve.o\
+	 ./Initialize/Boundary_Conditions/BC_Tilda.o ./Initialize/Print_2D_Curve.o\
 	 ./Initialize/Boundary_Conditions/BC_Single.o\
 	 ./Header_Files/Density_Calculator.o\
-	 ./Solver/Poisson/bcgc_solver.o\
+	 ./Solver/Poisson/bcgc_solver_Printing.o\
 	 ./Solver/Residuals/Convection_Term.o\
 	 ./Solver/Residuals/Viscous_Component_XX.o\
 	 ./Solver/Residuals/Viscous_Component_XY.o\
@@ -54,7 +57,9 @@ UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
 	 ./Solver/Residuals/Viscous_Component_YZ.o\
 	 ./Solver/Residuals/Viscous_Component_ZX.o\
 	 ./Solver/Residuals/Viscous_Component_ZY.o\
-	 ./Solver/Residuals/Viscous_Component_ZZ.o
+	 ./Solver/Residuals/Viscous_Component_ZZ.o\
+	 ./Solver/Residuals/Forcing_Term_Christos_X.o\
+	 ./Solver/Residuals/Forcing_Term_Christos_Y.o
 
 TEST_OBJS := main.o
 
@@ -84,8 +89,9 @@ run:
 
 
 
-check-syntax:
-	g++ -Wall -o  ${UTIL}
+clear-data:
+	rm *.dat 
+	rm *.pdf
 
 
 clean:

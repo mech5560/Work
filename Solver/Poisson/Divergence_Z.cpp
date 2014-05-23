@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-04-28 11:08:51 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-23 15:11:15 mike_georgiou>
  *
  *
 Divergence_X.cpp -- This program computes the X-component of the divergence
@@ -30,7 +30,7 @@ double Divergence_Z(double*** velocity_z, double dz,
       //\delta_3
       //i\pm 3
       derivative_z[1][vi]=-1./8.*Derivative(velocity_z[k+vj][j][i],
-                                            velocity_z[k+vj][j][i],
+                                            velocity_z[k+vj-3][j][i],
                                             dz,3);
 
       //i\pm 1
