@@ -1,20 +1,7 @@
 CC  := g++
-LINKER     := $(CC)	      
+LINKER     := $(CC)
 
-CFLAGS     := -std=c++0x -g3 -ggdb3 -Wall  -O3  -march=native  # -fdevirtualize -fexpensive-optimizations \
-          -fthread-jumps  -falign-functions  -falign-jumps -fdelete-null-pointer-checks -ftree-vrp\
-          -falign-loops  -falign-labels -fcaller-saves -fcrossjumping -fgcse -ftree-slp-vectorize\
-	  -ftree-pre -finline-functions -funswitch-loops -fgcse-after-reload -fvect-cost-model\
-          -fstrict-aliasing -fstrict-overflow -ftree-switch-conversion\
-          -ftree-tail-merge\
-	  -fvect-cost-model\
-          -fgcse-lm -fsched-interblock  -fsched-spec -fschedule-insns  -fschedule-insns2\
-           -fcse-follow-jumps  -fcse-skip-blocks -finline-small-functions\
-          -frerun-cse-after-loop -ftree-partial-pre -fipa-cp-clone\
-	   -foptimize-sibling-calls -fregmove -ftree-vectorize\
-          -findirect-inlining -fipa-sra -fpartial-inlining -fpeephole2\
-          -freorder-blocks\
-	   -freorder-functions
+CFLAGS     := -std=c++0x -g3 -ggdb3 -Wall -O3
 
 
 UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
@@ -68,29 +55,29 @@ TEST_OBJS := main.o
 	$(CC) $(CFLAGS)  -c $< -o $@
 
 
-all:	
+all:
 	make emain;
 
 
-emain :   $(TEST_OBJS) $(UTIL) 
+emain :   $(TEST_OBJS) $(UTIL)
 	  $(LINKER) $(CFLAGS)  $(TEST_OBJS) $(UTIL) \
-	  -o $@ 
+	  -o $@
 
 
 
 
 run:
-	make all	
-	./emain 
+	make all
+	./emain
 	mv -f Z* ./Data/Z/
 	mv -f Y* ./Data/Y/
-	mv -f X* ./Data/X/	
+	mv -f X* ./Data/X/
 
 
 
 
 clear-data:
-	rm *.dat 
+	rm *.dat
 	rm *.pdf
 
 
@@ -98,11 +85,11 @@ clean:
 	rm -f *.o *~core *.x
 
 cleanall:
-	rm -f *.o *~core *.x  *.dat 
-	rm -f ./Solver/*.o ./Solver/*~ 
+	rm -f *.o *~core *.x  *.dat
+	rm -f ./Solver/*.o ./Solver/*~
 	rm -f ./Initialize/Mesh_Generation/*.o ./Initialize/Mesh_Generation/*~
 	rm -f ./Solver/Residuals/*.o ./Solver/Residuals/*~
-	rm -f ./Solver/Poisson/*.o ./Solver/Poisson/*~	
-	rm -f ./Initialize/*.o ./Initialize/*~ 
+	rm -f ./Solver/Poisson/*.o ./Solver/Poisson/*~
+	rm -f ./Initialize/*.o ./Initialize/*~
 	rm -f ./Data/X/* ./Data/Y/* ./Data/Z/*
-	clear 
+	clear

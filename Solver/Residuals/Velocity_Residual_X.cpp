@@ -50,7 +50,7 @@ void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
 
 
         //Viscous Term XX
-        viscous_components[0] = 
+        viscous_components[0] =
 	  Viscous_Component_XX(velocity_x,velocity_y,
 			       velocity_z,
 			       temperature, Reynolds,

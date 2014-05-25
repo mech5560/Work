@@ -17,8 +17,8 @@ void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
                           double*** flux_x,double*** flux_y,
                           double***flux_z,
                           double*** temperature, double Reynolds,
-                          double source, 
-                          double dx, double* dy, double dz, 
+                          double source,
+                          double dx, double* dy, double dz,
 			  double time_total,
                           int ldx, int ldy, int ldz)
 {
@@ -35,7 +35,7 @@ void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
     for (int j=0; j<ldy; j++){
 
       y_local +=dy[j];
-    
+
       double x_local=0.;
       for (int i=0; i<ldx; i++){
 
@@ -84,7 +84,7 @@ void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
 
 
         residual_y[k][j][i] =
-	  -convection + viscous_total  
+	  -convection + viscous_total
 	  +source + force;
 
       }

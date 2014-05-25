@@ -90,7 +90,7 @@ int main (int argc, char *argv[])
   // 		    dx,
   // 		    ldx,  ldy,  ldz);
 
-  BC_Velocities( Arr.velocity_x, 
+  BC_Velocities( Arr.velocity_x,
                  Arr.velocity_y,
                  Arr.velocity_z,
                  ldx, ldy, ldz,
@@ -109,7 +109,7 @@ int main (int argc, char *argv[])
 			left_y, right_y,
 			left_z, right_z,
 			0,"Xinit");
-  
+
   Print_2D_Matrix_Ghost(Arr.velocity_y, ldx,ldy,ldz,
 			left_x, right_x,
 			left_y, right_y,
@@ -167,7 +167,7 @@ int main (int argc, char *argv[])
             left_x,right_x,
             left_y,right_y,
             left_z,right_z,
-            0,
+            2,
             rho_gradient_top, rho_gradient_bottom,
             Arr.dy);
 
@@ -179,7 +179,7 @@ int main (int argc, char *argv[])
             left_x,right_x,
             left_y,right_y,
             left_z,right_z,
-            0,
+            2,
             rho_gradient_top, rho_gradient_bottom,
             Arr.dy);
 
@@ -196,7 +196,7 @@ int main (int argc, char *argv[])
             left_x,right_x,
             left_y,right_y,
             left_z,right_z,
-            0,
+            2,
             rho_gradient_top, rho_gradient_bottom,
             Arr.dy);
 
@@ -300,7 +300,7 @@ int main (int argc, char *argv[])
       //           left_x,right_x,
       //           left_y,right_y,
       //           left_z,right_z,
-      //           0,
+      //          2,
       //           rho_gradient_top, rho_gradient_bottom,
       //           Arr.dy);
 
@@ -361,7 +361,7 @@ int main (int argc, char *argv[])
 			    time_index,"tilday");
 
 
-      Print_2D_Matrix_Ghost(Arr.velocity_z_tilda, 
+      Print_2D_Matrix_Ghost(Arr.velocity_z_tilda,
 			    ldx,ldy,ldz,
 			    0,0,
 			    0,0,
@@ -417,7 +417,7 @@ int main (int argc, char *argv[])
                 left_x,right_x,
                 left_y,right_y,
                 left_z,right_z,
-                0,
+                2,
                 pressure_gradient_top, pressure_gradient_bottom,
                 Arr.dy);
 
@@ -530,7 +530,7 @@ int main (int argc, char *argv[])
       //           left_x,right_x,
       //           left_y,right_y,
       //           left_z,right_z,
-      //           0,
+      //           2,
       //           rho_gradient_top, rho_gradient_bottom,
       //           Arr.dy);
 
@@ -568,7 +568,7 @@ int main (int argc, char *argv[])
       //           left_x,right_x,
       //           left_y,right_y,
       //           left_z,right_z,
-      //           0,
+      //           2,
       //           pressure_gradient_top, pressure_gradient_bottom,
       //           Arr.dy);
 
@@ -655,7 +655,7 @@ int main (int argc, char *argv[])
 				left_x,right_x,
 				left_y,right_y,
 				left_z,right_z,
-				time_index,"P"); 
+				time_index,"P");
 
           cout<<time_index<<endl;
           getchar();

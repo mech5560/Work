@@ -9,7 +9,7 @@
  * at the wall
  *
  *index : 1 Dirichlet
- *index : 0 Neuman
+ *index : 2 Neuman
  *
  * Written on Thursday, 20 March 2014.
  **********************************************/
@@ -64,12 +64,12 @@ void BC_Single(double ***data,
   }
 
 
-  if (index==0) // Neuman BC = BC_Bottom
+  if (index==2) // Neuman BC = BC_Bottom
     {
       //Wall BC
       for (int k = -lz; k < ldz+rz; k++){
         for (int i = -lx; i< ldx+rx; i++){
-
+            ///NEED TO FIX THAT ERROR WITH DY
           data[k][-ly][i] = bc_bottom*2.*dy[0] + data[k][0][i];
           data[k][ldy][i] = -bc_top*dy[ldy-1]*2. + data[k][ldy-1][i];
         }

@@ -3,7 +3,8 @@
  *  Last Modified: Time-stamp: <2014-05-19 15:01:05 mike_georgiou>
  *
  *
-Viscous_Component_ZX.cpp -- This function computes the X component of the velocity
+Viscous_Component_ZX.cpp -- This function computes the X component of
+ the velocity 
 residuals of the Z momentum equation
 *
 * Written on Thursday, 24 April 2014.
@@ -17,7 +18,7 @@ using namespace std;
 
 
 
-double Viscous_Component_ZX(double*** velocity_x, double*** velocity_z,
+double Viscous_Component_ZX(double*** velocity_x, double*** velocity_z, 
                             double*** temperature, double Reynolds,
                             double dx, double dz,
                             int i, int j, int k)
