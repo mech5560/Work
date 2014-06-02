@@ -1,8 +1,8 @@
 /*******************************************
- * Author: Michail Georgiou 
-*  Last Modified: Time-stamp: <2014-05-01 12:56:20 mike_georgiou>   
-*
-*
+ * Author: Michail Georgiou
+ *  Last Modified: Time-stamp: <2014-05-26 15:07:31 mike_georgiou>
+ *
+ *
 Velocity_Update_X.cpp -- This function updates the velocity based on eq.64 of
 the lessani-papalexandris paper
 *
@@ -22,15 +22,15 @@ void Velocity_Update_X(double*** velocity_x, double*** velocity_x_tilda,
       for (int i=0; i<ldx; i++){
 
 
-        velocity_x[k][j][i] = velocity_x_tilda[k][j][i] 
-					-dt/rho[k][j][i]*
+        velocity_x[k][j][i] = velocity_x_tilda[k][j][i]
+          -dt/rho[k][j][i]*
           ( (4./3.)*Derivative(pressure[k][j][i+1],pressure[k][j][i-1],
-															 dx,2)
-						-(1./3.)*Derivative(pressure[k][j][i+2],pressure[k][j][i-2],
-																dx,4));
+                               dx,2)
+            -(1./3.)*Derivative(pressure[k][j][i+2],pressure[k][j][i-2],
+                                dx,4));
 
 
       }
-		}
-	}
+    }
+  }
 }

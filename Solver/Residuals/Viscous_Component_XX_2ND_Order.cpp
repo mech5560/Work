@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 14:59:52 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-26 09:11:13 mike_georgiou>
  *
  *
 Viscous_Component_XX_2ND_Order.cpp -- This function computes the d/dx
@@ -22,12 +22,12 @@ double Viscous_Component_XX_2ND_Order(double*** velocity_x,
                                       int i, int j, int k)
 {
 
-  double derivative_xx[2], dy_total=0.;
+  double derivative_x[2];
 
   //Calculation of the du/dx component
   for (int vi=0; vi<2; vi++)
     {
-      derivative_xx[vi] = Derivative(velocity_x[k][j][i+vi],
+      derivative_x[vi] = Derivative(velocity_x[k][j][i+vi],
 				     velocity_x[k][j][i+vi-1],
 				     dx, 1);
     }
@@ -105,7 +105,7 @@ double Viscous_Component_XX_2ND_Order(double*** velocity_x,
   double viscous_terms[2];
   for (int vi=0; vi<2; vi++)
     {
-      viscous_terms[vi] =viscosity[vi]*(4./3.*derivative_xx[vi]
+      viscous_terms[vi] =viscosity[vi]*(4./3.*derivative_x[vi]
                                         -2./3.*(final_derivative_y[vi]+
                                                 final_derivative_z[vi]));
     }

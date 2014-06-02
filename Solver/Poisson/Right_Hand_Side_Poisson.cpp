@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-23 15:38:28 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-26 15:26:42 mike_georgiou>
  *
  *
 Right_Hand_Side_Poisson.cpp -- This program computes the rhs of the poisson equation
@@ -23,7 +23,7 @@ void Right_Hand_Side_Poisson(double* rhs, double*** velocity_x,
                              double dt,
                              int ldx, int ldy, int ldz)
 {
-  double density_derivative, derivatives[3], divergence;
+  double density_derivative, derivative[3], divergence;
 
 
   for (int k=0; k<ldz; k++){
@@ -36,24 +36,24 @@ void Right_Hand_Side_Poisson(double* rhs, double*** velocity_x,
         //                     +1.0*rho_old[k][j][i])/(2.*dt);
 
         //First Order, Just for Checking
-        density_derivative = 0.*(rho_new[k][j][i]-rho[k][j][i])/(dt);
+        density_derivative = (rho_new[k][j][i]-rho[k][j][i])/(dt);
 
         //Divergence X-Component
-        derivatives[0]=Divergence_X(velocity_x,dx,
+        derivative[0]=Divergence_X(velocity_x,dx,
                                     i, j, k);
 
 	//	cout<<derivatives[0]<<endl;
 
-        derivatives[1]=Divergence_Y(velocity_y,dy,
+        derivative[1]=Divergence_Y(velocity_y,dy,
 				       i,j,k);
 	//	cout<<derivatives[1]<<endl;
 
-        derivatives[2]=0.*Divergence_Z(velocity_z,dz,
-				       i, j, k);
+        derivative[2]=Divergence_Z(velocity_z,dz,
+				    i, j, k);
 
         divergence=0.;
         for (int vi=0; vi<3; vi++)
-          divergence+=derivatives[vi];
+          divergence+=derivative[vi];
 
 
         int index= A(i,ldx,

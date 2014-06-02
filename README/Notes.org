@@ -1,0 +1,36 @@
+***** Things i am doing per day
+
+**** 26/05
+*** Modifications on the code 
+
+** Change 17:16 did that [2/2]
+   - [X] Assigning the viscous term on the res_y into zero   
+   - [X] changed back
+
+** Change 17:36 did that [2/2]
+   - [X] Assigning the convective term on the res_y into zero   
+   - [X] changed back
+     
+*** OUTCOME
+- The convective terms are  introducing an instability to my code.
+- I need to read the paper regarding the projection methods because i think is
+  necessary to introduce e boundary condition for the u tilda  
+  
+
+
+
+**** 27/06
+
+*** General changes in the code
+- [ ] I modified the code in order to have constant density, I should   
+ change that when I ll apply the code into the general problem
+
+*** Modifications on the code
+
+** 13:56 
+- [ ] I introduced the p^{n-1} at the u_tildas.
+- [ ] I need to initialize the pressure correctly now in order for the
+  streamwise gradients to be absorbed.
+* Outcome 
+
+** After lunch, I ll print the dv/dy in order to check that it is zero at the boundaries

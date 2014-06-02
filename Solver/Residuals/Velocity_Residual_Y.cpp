@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-23 16:29:12 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-26 17:21:37 mike_georgiou> */
 /*
 
   This function will calculate the Velocity Residual in the Y-Momentum
@@ -83,9 +83,12 @@ void Velocity_Residual_Y( double*** residual_y,double*** velocity_x,
 
 
 
+
+
         residual_y[k][j][i] =
 	  -convection + viscous_total
 	  +source + force;
+
 
       }
       y_local +=dy[j];

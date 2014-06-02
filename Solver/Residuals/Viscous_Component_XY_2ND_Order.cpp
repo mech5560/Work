@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 14:59:52 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-26 09:12:04 mike_georgiou>
  *
  *
 Viscous_Component_XY_2ND_Order.cpp -- This function computes the d/dy
@@ -39,8 +39,9 @@ double Viscous_Component_XY_2ND_Order(double*** velocity_x,
   for(int vi=0; vi<2; vi++){
     for(int vj=0; vj<3; vj++){
   
-      interpolation_x[vj][vi] = Interpolation(velocity_y[k][j+vj-1][i+vi], 
-					      velocity_y[k][j+vj-1][i+vi-1]);
+      interpolation_x[vj][vi] = 
+	Interpolation(velocity_y[k][j+vj-1][i+vi], 
+		      velocity_y[k][j+vj-1][i+vi-1]); 
 					
     }
   }

@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-23 16:03:21 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-26 12:57:47 mike_georgiou>
  *
  *
 Velocity_Residual_X.cpp -- This function computes the velocity
@@ -81,7 +81,6 @@ void Velocity_Residual_X( double*** residual_x, double*** velocity_x,
 	viscous_total=0.;
         for(int index=0; index<3; index++)
           viscous_total += viscous_components[index];
-
 
 
         residual_x[k][j][i] = -convection + viscous_total + source + force;

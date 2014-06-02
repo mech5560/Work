@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-01 13:18:56 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-26 15:07:37 mike_georgiou>
  *
  *
 Velocity_Update_Y.cpp -- This function updates the velocity based on eq.64 of

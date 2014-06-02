@@ -21,13 +21,13 @@ int main (int argc, char *argv[])
 
   //Defining the number of solution points in each direction
   length_x = 1.; length_y =1.; length_z=1.;
-  ldx=64; ldy=64; ldz=64;
+  ldx=64; ldy=64; ldz=8;
 
   //Calculating dx and dz
   dx= length_x/(ldx*1.0);
   dz= length_z/(ldz*1.0);
 
-  dt= cfl*dx;
+  dt= cfl*(dx*dx);
 
   //Defining the Non-Zero Elements for the Poisson solver
   nze = 15*ldz*(ldy-2)*ldx + 14*ldz*ldx*2;
@@ -77,18 +77,10 @@ int main (int argc, char *argv[])
   /////////////////////////////////////////////////////////////
   //////////////////Initial Conditions/////////////////////////
   /////////////////////////////////////////////////////////////
-
-
   Initial_Brown_2( Arr.velocity_x,  Arr.velocity_y,
-  		   Arr.velocity_z,
-  		   dx, Arr.dy,
-  		   ldx,  ldy,  ldz);
-
-
-  // Initial_Christos( Arr.velocity_x,  Arr.velocity_y,
-  // 		    Arr.velocity_z,
-  // 		    dx,
-  // 		    ldx,  ldy,  ldz);
+                   Arr.velocity_z,
+                   dx, Arr.dy,
+                   ldx,  ldy,  ldz);
 
   BC_Velocities( Arr.velocity_x,
                  Arr.velocity_y,
@@ -104,23 +96,23 @@ int main (int argc, char *argv[])
                  Arr.dy, dx, 0.);
 
 
-  Print_2D_Matrix_Ghost(Arr.velocity_x, ldx,ldy,ldz,
-			left_x, right_x,
-			left_y, right_y,
-			left_z, right_z,
-			0,"Xinit");
+  // Print_2D_Matrix_Ghost(Arr.velocity_x, ldx,ldy,ldz,
+  //                       left_x, right_x,
+  //                       left_y, right_y,
+  //                       left_z, right_z,
+  //                       0,"Xinit");
 
-  Print_2D_Matrix_Ghost(Arr.velocity_y, ldx,ldy,ldz,
-			left_x, right_x,
-			left_y, right_y,
-			left_z, right_z,
-			0,"Yinit");
+  // Print_2D_Matrix_Ghost(Arr.velocity_y, ldx,ldy,ldz,
+  //                       left_x, right_x,
+  //                       left_y, right_y,
+  //                       left_z, right_z,
+  //                       0,"Yinit");
 
-  Print_2D_Matrix_Ghost(Arr.velocity_z, ldx,ldy,ldz,
-			left_x, right_x,
-			left_y, right_y,
-			left_z, right_z,
-			0,"Zinit");
+  // Print_2D_Matrix_Ghost(Arr.velocity_z, ldx,ldy,ldz,
+  //                       left_x, right_x,
+  //                       left_y, right_y,
+  //                       left_z, right_z,
+  //                       0,"Zinit");
 
   //Initializing the Arr.temperature
   Initial_One(Arr.temperature,
@@ -219,6 +211,12 @@ int main (int argc, char *argv[])
                     dz, dt,
                     ldx,  ldy,  ldz+1);
 
+
+  // Print_2D_Matrix(Arr.flux_x, ldx+1,ldy,ldz,0,"fluxx0");
+  // Print_2D_Matrix(Arr.flux_y, ldx,ldy+1,ldz,0,"fluxy0");
+  // Print_2D_Matrix(Arr.flux_z, ldx,ldy,ldz+1,0,"fluxz0");
+
+
   //initializing the Arr.Residuals at the n-1 time
   //In order to do that I will use the Velosity Residual Functions.
   //but with the initial values velocities as an input
@@ -252,9 +250,9 @@ int main (int argc, char *argv[])
                        time_total,
                        ldx,  ldy, ldz);
 
-  Print_2D_Matrix(Arr.residual_x_old, ldx,ldy,ldz,0,"rxold");
-  Print_2D_Matrix(Arr.residual_y_old, ldx,ldy,ldz,0,"ryold");
-  Print_2D_Matrix(Arr.residual_z_old, ldx,ldy,ldz,0,"rzold");
+  // Print_2D_Matrix(Arr.residual_x_old, ldx,ldy,ldz,0,"rxold");
+  // Print_2D_Matrix(Arr.residual_y_old, ldx,ldy,ldz,0,"ryold");
+  // Print_2D_Matrix(Arr.residual_z_old, ldx,ldy,ldz,0,"rzold");
 
 
 
@@ -270,6 +268,13 @@ int main (int argc, char *argv[])
 
   for (int time_index=0; time_index<4e5; time_index++ )
     {
+
+
+      // Continuity_Printer_Y(Arr.velocity_y, Arr.dy,
+      //                           ldx, ldy, ldz,
+      //                           time_index, "dvdy");
+
+
       time_total += dt;
       //////////////////////////////////////////////////////////////////////
       ///////////////////////////// Predictor Stage ////////////////////////
@@ -300,7 +305,7 @@ int main (int argc, char *argv[])
       //           left_x,right_x,
       //           left_y,right_y,
       //           left_z,right_z,
-      //          2,
+      //           2,
       //           rho_gradient_top, rho_gradient_bottom,
       //           Arr.dy);
 
@@ -308,9 +313,11 @@ int main (int argc, char *argv[])
       /*Calculating the Intermediate Velocity at the Predictor stage*/
       Intermediate_Velocity_X(Arr.velocity_x_tilda,
                               Arr.residual_x, Arr.residual_x_old,
-                              Arr.velocity_x, Arr.velocity_y, Arr.velocity_z,
+                              Arr.velocity_x, Arr.velocity_y,
+                              Arr.velocity_z,
                               Arr.flux_x, Arr.flux_y, Arr.flux_z,
-                              Arr.rho_new, Arr.rho, Arr.temperature_new,
+                              Arr.rho_new, Arr.rho,
+                              Arr.temperature_new,
                               Reynolds,
                               Pressure_Gradient,
                               dx, Arr.dy, dz, dt,
@@ -319,9 +326,11 @@ int main (int argc, char *argv[])
 
       Intermediate_Velocity_Y(Arr.velocity_y_tilda,
                               Arr.residual_y, Arr.residual_y_old,
-                              Arr.velocity_x, Arr.velocity_y, Arr.velocity_z,
+                              Arr.velocity_x, Arr.velocity_y,
+                              Arr.velocity_z,
                               Arr.flux_x, Arr.flux_y, Arr.flux_z,
-                              Arr.rho_new, Arr.rho, Arr.temperature_new,
+                              Arr.rho_new, Arr.rho,
+                              Arr.temperature_new,
                               Reynolds,
                               0.,
                               dx, Arr.dy, dz, dt,
@@ -330,9 +339,11 @@ int main (int argc, char *argv[])
 
       Intermediate_Velocity_Z(Arr.velocity_z_tilda,
                               Arr.residual_z, Arr.residual_z_old,
-                              Arr.velocity_x, Arr.velocity_y, Arr.velocity_z,
+                              Arr.velocity_x, Arr.velocity_y,
+                              Arr.velocity_z,
                               Arr.flux_x, Arr.flux_y, Arr.flux_z,
-                              Arr.rho_new, Arr.rho, Arr.temperature_new,
+                              Arr.rho_new, Arr.rho,
+                              Arr.temperature_new,
                               Reynolds,
                               0.,
                               dx, Arr.dy, dz, dt,
@@ -348,30 +359,30 @@ int main (int argc, char *argv[])
                left_z, right_z);
 
 
-      Print_2D_Matrix_Ghost(Arr.velocity_x_tilda, ldx,ldy,ldz,
-			    left_x,right_x,
-			    0,0,
-			    0,0,
-			    time_index,"tildax");
-      Print_2D_Matrix_Ghost(Arr.velocity_y_tilda,
-			    ldx,ldy,ldz,
-			    0,0,
-			    left_y,right_y,
-			    0,0,
-			    time_index,"tilday");
+      // Print_2D_Matrix_Ghost(Arr.velocity_x_tilda, ldx,ldy,ldz,
+      //                       left_x,right_x,
+      //                       0,0,
+      //                       0,0,
+      //                       time_index,"tildax");
+      // Print_2D_Matrix_Ghost(Arr.velocity_y_tilda,
+      //                       ldx,ldy,ldz,
+      //                       0,0,
+      //                       left_y,right_y,
+      //                       0,0,
+      //                       time_index,"tilday");
 
 
-      Print_2D_Matrix_Ghost(Arr.velocity_z_tilda,
-			    ldx,ldy,ldz,
-			    0,0,
-			    0,0,
-			    left_z,right_z,
-			    time_index,"tildaz");
+      // Print_2D_Matrix_Ghost(Arr.velocity_z_tilda,
+      //                       ldx,ldy,ldz,
+      //                       0,0,
+      //                       0,0,
+      //                       left_z,right_z,
+      //                       time_index,"tildaz");
 
 
-      Print_2D_Matrix(Arr.residual_x, ldx,ldy,ldz,time_index,"resx");
-      Print_2D_Matrix(Arr.residual_y, ldx,ldy,ldz,time_index,"resy");
-      Print_2D_Matrix(Arr.residual_z, ldx,ldy,ldz,time_index,"resz");
+      // Print_2D_Matrix(Arr.residual_x, ldx,ldy,ldz,time_index,"resx");
+      // Print_2D_Matrix(Arr.residual_y, ldx,ldy,ldz,time_index,"resy");
+      // Print_2D_Matrix(Arr.residual_z, ldx,ldy,ldz,time_index,"resz");
 
 
 
@@ -390,13 +401,13 @@ int main (int argc, char *argv[])
                               ldx, ldy,  ldz);
 
       //Introducing as a  prediction the exact solution
-      Print_1D_Matrix(rhs,
-		  ldx,  ldy,  ldz,
-		  time_index, "rhs");
+      // Print_1D_Matrix(rhs,
+      //                 ldx,  ldy,  ldz,
+      //                 time_index, "rhs");
 
       /*solving the Poisson Equation*/
-      BCSG_Printing(s_a, ij_a, result, rhs, precond_a,
-                    1e-15, 1000, dim_a, flag);
+      BCSG(s_a, ij_a, result, rhs, precond_a,
+           1e-15, 1000, dim_a, flag);
       if(flag==1)
         {
           cout<<time_index<<endl;
@@ -544,7 +555,7 @@ int main (int argc, char *argv[])
       //                         ldx,  ldy,  ldz);
 
       // /*Solving the Poisson Equation*/
-      // BCSG_Printing(s_a, ij_a, result, rhs, precond_a,
+      // BCSG(s_a, ij_a, result, rhs, precond_a,
       //               1e-15,1000,dim_a,flag);
       // if(flag==1)
       //   {
@@ -631,34 +642,34 @@ int main (int argc, char *argv[])
 
 
 
-      if (time_index%1==0)
+      if (time_index%100==0)
         {
           Print_2D_Matrix_Ghost(Arr.velocity_x_new,ldx,ldy,ldz,
-				left_x,right_x,
-				left_y,right_y,
-				left_z,right_z,
-				time_index,"X");
+                                left_x,right_x,
+                                left_y,right_y,
+                                left_z,right_z,
+                                time_index,"X");
 
           Print_2D_Matrix_Ghost(Arr.velocity_y_new,ldx,ldy,ldz,
-				left_x,right_x,
-				left_y,right_y,
-				left_z,right_z,
-				time_index,"Y");
+                                left_x,right_x,
+                                left_y,right_y,
+                                left_z,right_z,
+                                time_index,"Y");
 
           Print_2D_Matrix_Ghost(Arr.velocity_z_new,ldx,ldy,ldz,
-				left_x,right_x,
-				left_y,right_y,
-				left_z,right_z,
-				time_index,"Z");
+                                left_x,right_x,
+                                left_y,right_y,
+                                left_z,right_z,
+                                time_index,"Z");
 
           Print_2D_Matrix_Ghost(Arr.pressure,ldx,ldy,ldz,
-				left_x,right_x,
-				left_y,right_y,
-				left_z,right_z,
-				time_index,"P");
+                                left_x,right_x,
+                                left_y,right_y,
+                                left_z,right_z,
+                                time_index,"P");
 
           cout<<time_index<<endl;
-          getchar();
+          // getchar();
         }
 
       Next_Step(&Arr);

@@ -1,6 +1,6 @@
 /*******************************************
  * Author: Michail Georgiou
- *  Last Modified: Time-stamp: <2014-05-19 09:35:33 mike_georgiou>
+ *  Last Modified: Time-stamp: <2014-05-26 12:30:02 mike_georgiou>
  *
  *
 Convection_Term.cpp -- This function will compute the convection term of the
@@ -24,7 +24,7 @@ double Convection_Term( double*** velocity,
   //X-Direction - 4th order accurate - Uniform Grid
 
   //Interpolated velocities necessary for the computation of the
-  //  derivative 
+  //derivative 
   for (int vi=0; vi<2; vi++)
     {
       interpolated_velocity[vi]=

@@ -1,6 +1,0 @@
-*** Objectives for this code [1/2]
-- [X] Modify the allocator function to extension of the borders of the matrices
-- [ ] Modify the code in order to use the new allocator function
-  ** Notes Regarding the modification of the code [0/0]
-  - [ ] I will modify the Cubic Mesh function to give me the value of Y at the cell's center and
-    not at the cell's borders

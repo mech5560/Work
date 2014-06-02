@@ -1,8 +1,8 @@
 /*******************************************
  * Author: Michail Georgiou
-*  Last Modified: Time-stamp: <2014-05-23 16:29:18 mike_georgiou>
-*
-*
+ *  Last Modified: Time-stamp: <2014-05-26 12:57:42 mike_georgiou>
+ *
+ *
 Velocity_Residual_Z.cpp -- This function computes the velocity residuals in
 the
 Z-direction (eq. 28 lessani-papalexandris paper). Still, fourth order accuracy
@@ -17,68 +17,69 @@ the Y-direction.
 void Velocity_Residual_Z( double*** residual_z, double*** velocity_x,
                           double*** velocity_y, double*** velocity_z,
                           double*** flux_x, double*** flux_y,
-			  double*** flux_z,
+                          double*** flux_z,
                           double*** temperature, double Reynolds,
-			  double source,
+                          double source,
                           double dx, double* dy, double dz,
-			  double time_total,
+                          double time_total,
                           int ldx, int ldy, int ldz)
 {
 
-    //Variable for the calculation of the convective terms
-    double  convection;
+  //Variable for the calculation of the convective terms
+  double  convection;
 
-    //Variables for the calculation of the viscous terms
-    double viscous_components[3],  viscous_total;
+  //Variables for the calculation of the viscous terms
+  double viscous_components[3],  viscous_total;
 
-    for (int k=0; k<ldz; k++){
-        for (int j=0; j<ldy; j++){
-            for (int i=0; i<ldx; i++){
-
-
-                //Convection Term
-                convection= Convection_Term(velocity_z,
-                                            flux_x, flux_y,flux_z,
-                                            dx, dy, dz,
-                                            i, j, k);
-
-                //Viscous_Term_ZX
-                viscous_components[0]=
-                    Viscous_Component_ZX(velocity_x, velocity_z,
-                                         temperature, Reynolds,
-                                         dx, dz,
-                                         i, j, k);
-
-                //Viscous Term ZY
-                viscous_components[1]=
-                    Viscous_Component_ZY(velocity_y, velocity_z,
-                                         temperature, Reynolds,
-                                         dy,dz,
-                                         i, j, k);
+  for (int k=0; k<ldz; k++){
+    for (int j=0; j<ldy; j++){
+      for (int i=0; i<ldx; i++){
 
 
-                //Viscous Term ZZ
-                viscous_components[2]=
-                    Viscous_Component_ZZ(velocity_x, velocity_y,
-                                         velocity_z,
-                                         temperature, Reynolds,
-                                         dx, dy, dz,
-                                         i, j, k);
+        //Convection Term
+        convection= Convection_Term(velocity_z,
+                                    flux_x, flux_y,flux_z,
+                                    dx, dy, dz,
+                                    i, j, k);
+
+        //Viscous_Term_ZX
+        viscous_components[0]=
+          Viscous_Component_ZX(velocity_x, velocity_z,
+                               temperature, Reynolds,
+                               dx, dz,
+                               i, j, k);
+
+        //Viscous Term ZY
+        viscous_components[1]=
+          Viscous_Component_ZY(velocity_y, velocity_z,
+                               temperature, Reynolds,
+                               dy,dz,
+                               i, j, k);
+
+
+        //Viscous Term ZZ
+        viscous_components[2]=
+          Viscous_Component_ZZ(velocity_x, velocity_y,
+                               velocity_z,
+                               temperature, Reynolds,
+                               dx, dy, dz,
+                               i, j, k);
 
 
 
 
-                viscous_total=0.;
-                for(int index=0; index<3; index++)
-                    viscous_total += viscous_components[index];
+        viscous_total=0.;
+        for(int index=0; index<3; index++)
+          viscous_total += viscous_components[index];
 
 
-                residual_z[k][j][i] = -convection + viscous_total + source;
+
+        residual_z[k][j][i] = -convection + viscous_total + source;
 
 
-            }
-        }
+      }
     }
+  }
 
 
 }

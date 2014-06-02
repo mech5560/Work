@@ -1,7 +1,7 @@
 CC  := g++
 LINKER     := $(CC)
 
-CFLAGS     := -std=c++0x -g3 -ggdb3 -Wall -O3
+CFLAGS     := -std=c++0x -g3 -ggdb3 -Wall -O3 -mfpmath=sse -march=native
 
 
 UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
@@ -34,7 +34,7 @@ UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
 	 ./Initialize/Boundary_Conditions/BC_Tilda.o ./Initialize/Print_2D_Curve.o\
 	 ./Initialize/Boundary_Conditions/BC_Single.o\
 	 ./Header_Files/Density_Calculator.o\
-	 ./Solver/Poisson/bcgc_solver_Printing.o\
+	 ./Solver/Poisson/bcgc_solver.o\
 	 ./Solver/Residuals/Convection_Term.o\
 	 ./Solver/Residuals/Viscous_Component_XX.o\
 	 ./Solver/Residuals/Viscous_Component_XY.o\
@@ -46,7 +46,11 @@ UTIL := ./Solver/Energy_Equation.o ./Solver/Energy_Equation_Corrector.o\
 	 ./Solver/Residuals/Viscous_Component_ZY.o\
 	 ./Solver/Residuals/Viscous_Component_ZZ.o\
 	 ./Solver/Residuals/Forcing_Term_Christos_X.o\
-	 ./Solver/Residuals/Forcing_Term_Christos_Y.o
+	 ./Solver/Residuals/Forcing_Term_Christos_Y.o\
+	./Solver/Intermediate_Velocity_X_Press.o\
+	 ./Solver/Intermediate_Velocity_Y_Press.o\
+	 ./Solver/Intermediate_Velocity_Z_Press.o ./Initialize/Continuity_Printer_Y.o\
+
 
 TEST_OBJS := main.o
 
@@ -85,7 +89,7 @@ clean:
 	rm -f *.o *~core *.x
 
 cleanall:
-	rm -f *.o *~core *.x  *.dat
+	rm -f *.o *~core *.x
 	rm -f ./Solver/*.o ./Solver/*~
 	rm -f ./Initialize/Mesh_Generation/*.o ./Initialize/Mesh_Generation/*~
 	rm -f ./Solver/Residuals/*.o ./Solver/Residuals/*~

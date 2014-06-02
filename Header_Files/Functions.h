@@ -1,4 +1,4 @@
-/*  Last Modified Time-stamp: <2014-05-23 12:11:46 mike_georgiou> */
+/*  Last Modified Time-stamp: <2014-05-27 14:27:59 mike_georgiou> */
 
 #ifndef Functions
 #define Functions
@@ -304,6 +304,62 @@ void Flux_Evaluation_Z(double*** flux_z, double*** velocity_z,
                        double*** rho, double*** pressure,
                        double dz, double dt,
                        int ldx, int ldy, int ldz);
+
+
+void Intermediate_Velocity_Z_Press(double*** velocity_z_tilda,
+                                   double*** residual_z,
+                                   double*** residual_z_old,
+                                   double*** velocity_x,
+                                   double*** velocity_y,
+                                   double*** velocity_z,
+                                   double*** flux_x, double***flux_y,
+                                   double***flux_z,
+                                   double*** rho_new, double*** rho,
+                                   double*** pressure,
+                                   double*** temperature,
+                                   double Reynolds, double source_term,
+                                   double dx, double* dy,  double dz,
+                                   double dt, double time_total,
+                                   int ldx, int ldy, int ldz);
+
+void Intermediate_Velocity_Y_Press(double*** velocity_y_tilda,
+				   double*** residual_y,
+				   double*** residual_y_old,
+				   double*** velocity_x, 
+				   double*** velocity_y,
+				   double*** velocity_z,
+				   double*** flux_x, double***flux_y, 
+				   double***flux_z,
+				   double*** rho_new, double*** rho,
+				   double*** temperature,
+				   double*** pressure,
+				   double Reynolds,double source,
+				   double dx, double* dy,  double dz,
+				   double dt, double time_total,
+				   int ldx, int ldy, int ldz);
+
+
+void Intermediate_Velocity_X_Press(double*** velocity_x_tilda,
+				   double*** residual_x,
+				   double*** residual_x_old,
+				   double*** velocity_x, 
+				   double*** velocity_y,
+				   double*** velocity_z,
+				   double*** flux_x, double***flux_y,
+				   double***flux_z,
+				   double*** rho_new, double*** rho,
+				   double*** pressure,
+				   double*** temperature,
+				   double Reynolds,double source,
+				   double dx, double* dy,  double dz,
+				   double dt, double time_total,
+				   int ldx, int ldy, int ldz);
+
+
+
+void Continuity_Printer_Y(double*** velocity_y, double* dy,
+                          int ldx, int ldy, int ldz,
+                          int time_index, char *mike);
 
 
 #endif
